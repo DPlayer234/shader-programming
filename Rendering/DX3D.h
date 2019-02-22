@@ -8,8 +8,7 @@
 #include <d3dcommon.h>
 #include <d3d11.h>
 #include <DirectXMath.h>
-
-using Matrix = DirectX::XMMATRIX;
+#include "typedefs.h"
 
 class DX3D
 {

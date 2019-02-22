@@ -2,7 +2,6 @@
 #include <Windows.h>
 #include "DX3D.h"
 #include "Camera.h"
-#include "ColorShader.h"
 #include "Model.h"
 #include <vector>
 

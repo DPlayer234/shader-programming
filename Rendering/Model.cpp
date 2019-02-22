@@ -23,7 +23,7 @@ void Model::Update(float deltaTime)
 {
 }
 
-bool Model::Render(ID3D11DeviceContext* context, Matrix view, Matrix projection)
+bool Model::Render(ID3D11DeviceContext* context, const Matrix& view, const Matrix& projection, const Float3& LightPos)
 {
 	if (!shader) return false;
 
@@ -34,7 +34,14 @@ bool Model::Render(ID3D11DeviceContext* context, Matrix view, Matrix projection)
 	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	return shader->Render(context, GetIndexCount(), GetWorldMatrix(), view, projection);
+	UniformBufferType uniforms;
+
+	uniforms.World = GetWorldMatrix();
+	uniforms.View = view;
+	uniforms.Projection = projection;
+	uniforms.LightPos = LightPos;
+
+	return shader->Render(context, GetIndexCount(), uniforms);
 }
 
 void Model::SetPosition(Vector position)
@@ -50,6 +57,11 @@ void Model::SetRotation(Vector rotation)
 void Model::SetScale(Vector scale)
 {
 	DirectX::XMStoreFloat3(&this->scale, scale);
+}
+
+Shader* Model::GetShader()
+{
+	return shader;
 }
 
 Matrix Model::GetWorldMatrix()

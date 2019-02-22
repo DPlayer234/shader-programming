@@ -1,0 +1,35 @@
+cbuffer UniformBuffer : register(b0)
+{
+	matrix world;
+	matrix view;
+	matrix projection;
+	float3 lightPos;
+
+	float4 diffuseAlbedo;
+	float4 specularAlbedo;
+	float specularPower;
+};
+
+struct PixelInputType
+{
+	float4 position : SV_POSITION;
+	float4 color : COLOR;
+	float4 worldPos : POSITION;
+	float3 normal : NORMAL;
+};
+
+float4 main(PixelInputType input) : SV_TARGET
+{
+	matrix mv = mul(view, world);
+
+	float4 p = mul(mv, input.worldPos);
+	float3 N = input.normal;
+	float3 L = lightPos - p.xyz;
+	float3 V = -p.xyz;
+	float3 H = normalize(L + V);
+
+	float4 diffuse = max(dot(N, L), 0.0f) * diffuseAlbedo;
+	float4 specular = pow(max(dot(N, H), 0.0f), specularPower) * specularAlbedo;
+
+	return input.color * (diffuse + specular);
+}

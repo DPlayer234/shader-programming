@@ -70,7 +70,7 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 
 	// The adapter's output, for example a monitor
 	IDXGIOutput* adapterOutput;
-	unsigned int numModes, stringLength;
+	unsigned int numModes;
 
 	// Display-Settings (Array)
 	DXGI_MODE_DESC* displayModeList;
@@ -138,7 +138,7 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 
 	if (FAILED(result)) return false;
 
-	for (int i = 0; i < numModes; i++)
+	for (unsigned int i = 0; i < numModes; i++)
 	{
 		auto mode = displayModeList[i];
 		
@@ -302,8 +302,8 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 #pragma endregion
 
 #pragma region Viewport and Matrices
-	viewport.Width = screenWidth;
-	viewport.Height = screenHeight;
+	viewport.Width = (FLOAT)screenWidth;
+	viewport.Height = (FLOAT)screenHeight;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0.0f;
@@ -315,7 +315,7 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 	screenAspect = (float)screenWidth / (float)screenHeight;
 
 	projectionMatrix = DirectX::XMMatrixPerspectiveLH(fieldOfView, screenAspect, screenNear, screenDepth);
-	orthoMatrix = DirectX::XMMatrixOrthographicLH(screenWidth, screenHeight, screenNear, screenDepth);
+	orthoMatrix = DirectX::XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
 #pragma endregion
 
 	return true;

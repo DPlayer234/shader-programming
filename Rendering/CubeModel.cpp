@@ -1,7 +1,6 @@
 #include "CubeModel.h"
 
 #include <math.h>
-#include "UnlitShader.h"
 
 Float3 add(Float3 a, Float3 b, Float3 c)
 {
@@ -18,19 +17,6 @@ Float3 unm(Float3 v)
 
 CubeModel::CubeModel()
 {
-}
-
-bool CubeModel::InitializeShader(ID3D11Device* device, HWND hwnd)
-{
-	bool result;
-
-	shader = new UnlitShader;
-	if (!shader) return false;
-
-	result = shader->Initialize(device, hwnd);
-	if (!result) return false;
-
-	return true;
 }
 
 bool CubeModel::CreateVertexArray()

@@ -1,6 +1,6 @@
 #include "GraphicsManager.h"
 
-#include "CubeModel.h"
+#include "ModelDefinitions.h"
 
 GraphicsManager::GraphicsManager()
 {
@@ -47,13 +47,15 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	camera = new Camera;
 	if (!camera) return false;
 
-	camera->SetPosition(0.0f, 0.0f, -1.5f);
-	camera->SetRotation(0.0f, 0.0f, 0.0f);
+	camera->SetPosition(0.0f, 0.8f, -1.0f);
+	camera->SetRotation(20.0f, 0.0f, 0.0f);
 
 #pragma region Add Models
 	Float3 position;
 
-	Model* model = AddModel<CubeModel>();
+	Model* model = AddModel<CubeModelBP>();
+	if (!model) return false;
+
 	position = Float3(0.0f, 0.0f, 0.0f);
 	model->SetPosition(DirectX::XMLoadFloat3(&position));
 #pragma endregion
@@ -77,8 +79,11 @@ void GraphicsManager::Release()
 template<class T>
 Model* GraphicsManager::AddModel()
 {
+	bool result;
+
 	Model* model = new T;
-	model->Initialize(dx3d->GetDevice(), this->hwnd);
+	result = model->Initialize(dx3d->GetDevice(), this->hwnd);
+	if (!result) return nullptr;
 
 	models.push_back(model);
 
@@ -98,11 +103,13 @@ bool GraphicsManager::Render()
 	camera->GetViewMatrix(&view);
 	dx3d->GetProjectionMatrix(&projection);
 
+	Float3 lightPos(100.0f, 100.0f, 100.0f);
+
 	bool result;
 
 	for (Model* const& model : models)
 	{
-		result |= model->Render(context, view, projection);
+		result |= model->Render(context, view, projection, lightPos);
 	}
 
 	dx3d->EndScene();

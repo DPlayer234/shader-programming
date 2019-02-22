@@ -1,11 +1,6 @@
 #pragma once
 
-#include <d3d11.h>
-#include <DirectXMath.h>
-
-using Float2 = DirectX::XMFLOAT2;
-using Float3 = DirectX::XMFLOAT3;
-using Float4 = DirectX::XMFLOAT4;
+#include "typedefs.h"
 
 struct Vertex
 {

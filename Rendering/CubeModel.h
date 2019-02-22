@@ -8,7 +8,6 @@ public:
 	CubeModel();
 
 protected:
-	bool InitializeShader(ID3D11Device* device, HWND hwnd) override;
 	bool CreateVertexArray() override;
 	bool CreateIndexArray() override;
 

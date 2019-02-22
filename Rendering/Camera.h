@@ -1,9 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
-
-using Float3 = DirectX::XMFLOAT3;
-using Vector = DirectX::XMVECTOR;
-using Matrix = DirectX::XMMATRIX;
+#include "typedefs.h"
 
 class Camera
 {

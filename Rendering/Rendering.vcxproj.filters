@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{4a218e46-ea7f-402a-925f-a18ad72117d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,13 +27,7 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Vertex.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="ColorShader.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="DX3D.cpp">
@@ -54,6 +51,9 @@
     <ClCompile Include="UnlitShader.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="BlinnPhongShader.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="System.h">
@@ -66,9 +66,6 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorShader.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="defines.h">
@@ -92,7 +89,19 @@
     <ClInclude Include="CubeModel.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="ModelDefinitions.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="UniformBufferType.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="typedefs.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
     <ClInclude Include="UnlitShader.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="BlinnPhongShader.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
@@ -100,7 +109,17 @@
     <Text Include="shader-error-log.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="unlit.ps" />
-    <None Include="unlit.vs" />
+    <None Include="unlit.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="unlit.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="blinnphong.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="blinnphong.ps">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

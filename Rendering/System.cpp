@@ -206,7 +206,7 @@ bool System::UpdateHighFrequencyTimer()
 
 	deltaTime = (currentTicks.QuadPart - oldTicks.QuadPart) * secsPerTick;
 
-	framesPerSecond = 1.0f / deltaTime;
+	framesPerSecond = (int)(1.0f / deltaTime);
 
 	frameCounter += 1;
 	frameTimer += deltaTime;

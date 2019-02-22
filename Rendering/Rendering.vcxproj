@@ -135,8 +135,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BlinnPhongShader.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ColorShader.cpp" />
     <ClCompile Include="CubeModel.cpp" />
     <ClCompile Include="DX3D.cpp" />
     <ClCompile Include="GraphicsManager.cpp" />
@@ -147,20 +147,22 @@
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UnlitShader.cpp" />
-    <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BlinnPhongShader.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="ColorShader.h" />
     <ClInclude Include="CubeModel.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="DX3D.h" />
     <ClInclude Include="GraphicsManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelDefinitions.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="typedefs.h" />
+    <ClInclude Include="UniformBufferType.h" />
     <ClInclude Include="UnlitShader.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
@@ -168,6 +170,8 @@
     <Text Include="shader-error-log.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="blinnphong.ps" />
+    <None Include="blinnphong.vs" />
     <None Include="unlit.ps" />
     <None Include="unlit.vs" />
   </ItemGroup>
