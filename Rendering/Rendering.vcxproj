@@ -139,11 +139,14 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CubeModel.cpp" />
     <ClCompile Include="DX3D.cpp" />
+    <ClCompile Include="Float3Math.cpp" />
     <ClCompile Include="GraphicsManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="PyramidModel.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UnlitShader.cpp" />
@@ -154,11 +157,14 @@
     <ClInclude Include="CubeModel.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="DX3D.h" />
+    <ClInclude Include="Float3Math.h" />
     <ClInclude Include="GraphicsManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="KeyCode.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="PyramidModel.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="typedefs.h" />
@@ -174,6 +180,11 @@
     <None Include="blinnphong.vs" />
     <None Include="unlit.ps" />
     <None Include="unlit.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\Circle.tga" />
+    <Image Include="data\skybox.tga" />
+    <Image Include="data\stone01.tga" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

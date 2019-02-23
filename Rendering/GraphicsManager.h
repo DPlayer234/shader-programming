@@ -1,12 +1,13 @@
 #pragma once
 #include <Windows.h>
+#include <vector>
 #include "InputManager.h"
 #include "DX3D.h"
 #include "Camera.h"
 #include "Model.h"
 #include "Shader.h"
 #include "Texture.h"
-#include <vector>
+#include "Skybox.h"
 
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = false;
@@ -46,6 +47,7 @@ private:
 	DX3D* dx3d = nullptr;
 	HWND hwnd;
 
+	Skybox* skybox;
 	std::vector<Model*> models;
 	std::vector<Shader*> shaders;
 	std::vector<Texture*> textures;

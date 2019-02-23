@@ -4,6 +4,8 @@
 #include "defines.h"
 
 #include "CubeModel.h"
+#include "PyramidModel.h"
+
 #include "UnlitShader.h"
 #include "BlinnPhongShader.h"
 
@@ -121,7 +123,19 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	camera->SetPosition(Float3(0.0f, 0.8f, -2.0f));
 	camera->SetRotation(Float3(20.0f, 0.0f, 0.0f));
 
-#pragma region First Model
+#pragma region Skybox
+	skybox = AddModel<Skybox>();
+	auto skyboxShader = LoadShader<UnlitShader>();
+	auto skyboxTexture = LoadTexture("data/skybox.tga");
+
+	if (!skybox || !skyboxShader || !skyboxTexture) return false;
+
+	skybox->InitializeSkybox();
+	skyboxShader->SetTexture(skyboxTexture->GetResourceView());
+	skybox->SetShader(skyboxShader);
+#pragma endregion
+
+#pragma region Model 1
 	auto model1 = AddModel<CubeModel>();
 	auto shader1 = LoadShader<BlinnPhongShader>();
 	auto stone01 = LoadTexture("data/stone01.tga");
@@ -131,6 +145,17 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	model1->SetPosition(Float3(0.0f, 0.0f, 0.0f));
 	shader1->SetTexture(stone01->GetResourceView());
 	model1->SetShader(shader1);
+#pragma endregion
+
+#pragma region Model 2
+	auto model2 = AddModel<PyramidModel>();
+	auto shader2 = LoadShader<BlinnPhongShader>();
+
+	if (!model2 || !shader1 || !stone01) return false;
+
+	model2->SetPosition(Float3(3.0f, 0.0f, 0.0f));
+	shader2->SetTexture(stone01->GetResourceView());
+	model2->SetShader(shader2);
 #pragma endregion
 
 	return true;
@@ -210,6 +235,9 @@ bool GraphicsManager::Render()
 	dx3d->BeginScene(0.1f, 0.1f, 0.1f, 1.0f);
 
 	camera->Render();
+
+	// Make sure skybox is centered around camera
+	skybox->SetPosition(camera->GetPosition());
 
 	camera->GetViewMatrix(&view);
 	dx3d->GetProjectionMatrix(&projection);

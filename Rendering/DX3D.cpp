@@ -168,9 +168,9 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 	
 	result = device->CreateDepthStencilView(depthStencilBuffer, &depthStencilViewDesc, &depthStencilView);
 	if (FAILED(result)) return false;
+#pragma endregion
 
 	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
-#pragma endregion
 
 #pragma region Rasterizer
 	okay = GetRasterizerDesc(&rasterizerDesc);
@@ -349,6 +349,7 @@ bool DX3D::GetDepthStencilDesc(D3D11_DEPTH_STENCIL_DESC* _depthStencilDesc)
 	depthStencilDesc.StencilEnable = true;
 	depthStencilDesc.DepthEnable = true;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
 	depthStencilDesc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
 

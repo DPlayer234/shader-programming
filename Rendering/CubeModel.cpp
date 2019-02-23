@@ -1,32 +1,7 @@
 #include "CubeModel.h"
 
 #include <math.h>
-
-Float3 add(Float3 a, Float3 b)
-{
-	return Float3(
-		a.x + b.x,
-		a.y + b.y,
-		a.z + b.z);
-}
-
-Float3 add(Float3 a, Float3 b, Float3 c)
-{
-	return Float3(
-		a.x + b.x + c.x,
-		a.y + b.y + c.y,
-		a.z + b.z + c.z);
-}
-
-Float3 unm(Float3 v)
-{
-	return Float3(-v.x, -v.y, -v.z);
-}
-
-Float3 mul(Float3 v, float s)
-{
-	return Float3(v.x * s, v.y * s, v.z * s);
-}
+#include "Float3Math.h"
 
 CubeModel::CubeModel()
 {
@@ -43,15 +18,22 @@ bool CubeModel::CreateVertexArray()
 	const static float psiz = 0.5f;
 	const static float nsiz = -psiz;
 
+	const static float UV_OFFSET = 2e-3f;
+
+	const static float uv1L = 0.0f + UV_OFFSET;
+	const static float uv1U = 0.5f - UV_OFFSET;
+	const static float uv2L = 0.5f + UV_OFFSET;
+	const static float uv2U = 1.0f - UV_OFFSET;
+
 	vertexCount = 24;
 	vertexArray = new Vertex[vertexCount];
 
-	SetVertices(vertexArray + 0,  Float3(0.0f, psiz, 0.0f), Float3(psiz, 0.0f, 0.0f), Float3(0.0f, 0.0f, psiz));
-	SetVertices(vertexArray + 4,  Float3(0.0f, nsiz, 0.0f), Float3(psiz, 0.0f, 0.0f), Float3(0.0f, 0.0f, psiz));
-	SetVertices(vertexArray + 8,  Float3(psiz, 0.0f, 0.0f), Float3(0.0f, psiz, 0.0f), Float3(0.0f, 0.0f, psiz));
-	SetVertices(vertexArray + 12, Float3(nsiz, 0.0f, 0.0f), Float3(0.0f, psiz, 0.0f), Float3(0.0f, 0.0f, psiz));
-	SetVertices(vertexArray + 16, Float3(0.0f, 0.0f, psiz), Float3(psiz, 0.0f, 0.0f), Float3(0.0f, psiz, 0.0f));
-	SetVertices(vertexArray + 20, Float3(0.0f, 0.0f, nsiz), Float3(psiz, 0.0f, 0.0f), Float3(0.0f, psiz, 0.0f));
+	SetVertices(vertexArray + 0,  Float3(0.0f, psiz, 0.0f), Float3(psiz, 0.0f, 0.0f), Float3(0.0f, 0.0f, psiz), Float2(uv1L, uv1L), Float2(uv1U, uv1U)); // TOP
+	SetVertices(vertexArray + 4,  Float3(0.0f, nsiz, 0.0f), Float3(psiz, 0.0f, 0.0f), Float3(0.0f, 0.0f, psiz), Float2(uv2U, uv1L), Float2(uv2L, uv1U)); // BOTTOM
+	SetVertices(vertexArray + 8,  Float3(psiz, 0.0f, 0.0f), Float3(0.0f, 0.0f, nsiz), Float3(0.0f, psiz, 0.0f), Float2(uv1U, uv2L), Float2(uv1L, uv2U)); // Other faces
+	SetVertices(vertexArray + 12, Float3(nsiz, 0.0f, 0.0f), Float3(0.0f, 0.0f, nsiz), Float3(0.0f, psiz, 0.0f), Float2(uv1L, uv2L), Float2(uv1U, uv2U));
+	SetVertices(vertexArray + 16, Float3(0.0f, 0.0f, psiz), Float3(psiz, 0.0f, 0.0f), Float3(0.0f, psiz, 0.0f), Float2(uv2U, uv2L), Float2(uv2L, uv2U));
+	SetVertices(vertexArray + 20, Float3(0.0f, 0.0f, nsiz), Float3(psiz, 0.0f, 0.0f), Float3(0.0f, psiz, 0.0f), Float2(uv2L, uv2L), Float2(uv2U, uv2U));
 
 	return true;
 }
@@ -64,7 +46,7 @@ bool CubeModel::CreateIndexArray()
 	return true;
 }
 
-void CubeModel::SetVertices(Vertex vertices[4], Float3 direction, Float3 offset1, Float3 offset2)
+void CubeModel::SetVertices(Vertex vertices[4], Float3 direction, Float3 offset1, Float3 offset2, Float2 uvTopLeft, Float2 uvBottomRight)
 {
 	vertices[0].Position = add(direction, offset1, offset2);
 	vertices[1].Position = add(direction, unm(offset1), offset2);
@@ -76,10 +58,10 @@ void CubeModel::SetVertices(Vertex vertices[4], Float3 direction, Float3 offset1
 	vertices[2].Normal = add(direction, mul(vertices[2].Position, 0.1));
 	vertices[3].Normal = add(direction, mul(vertices[3].Position, 0.1));
 
-	vertices[0].Tex = Float2(1.0f, 1.0f);
-	vertices[1].Tex = Float2(0.0f, 1.0f);
-	vertices[2].Tex = Float2(1.0f, 0.0f);
-	vertices[3].Tex = Float2(0.0f, 0.0f);
+	vertices[0].Tex = Float2(uvBottomRight.x, uvTopLeft.y);
+	vertices[1].Tex = uvTopLeft;
+	vertices[2].Tex = uvBottomRight;
+	vertices[3].Tex = Float2(uvTopLeft.x, uvBottomRight.y);
 
 	//Float4 color(abs(direction.x), abs(direction.y), abs(direction.z), 1.0f);
 	Float4 color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -91,12 +73,12 @@ void CubeModel::SetVertices(Vertex vertices[4], Float3 direction, Float3 offset1
 }
 
 UINT CubeModel::indices[36] = {
-	0,  2,  1,
-	1,  2,  3,
-	4,  5,  6,
-	5,  7,  6,
-	8,  9, 10,
-	9, 11, 10,
+	 0,  2,  1,
+	 1,  2,  3,
+	 4,  5,  6,
+	 5,  7,  6,
+	 8,  9, 10,
+	 9, 11, 10,
 	12, 14, 13,
 	13, 14, 15,
 	16, 17, 18,

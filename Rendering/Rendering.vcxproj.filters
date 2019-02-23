@@ -57,6 +57,15 @@
     <ClCompile Include="BlinnPhongShader.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Float3Math.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="PyramidModel.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="System.h">
@@ -107,6 +116,15 @@
     <ClInclude Include="KeyCode.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="PyramidModel.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Float3Math.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="shader-error-log.txt" />
@@ -124,5 +142,16 @@
     <None Include="blinnphong.ps">
       <Filter>Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\stone01.tga">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="data\Circle.tga">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="data\skybox.tga">
+      <Filter>Data</Filter>
+    </Image>
   </ItemGroup>
 </Project>
