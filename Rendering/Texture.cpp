@@ -60,7 +60,7 @@ void Texture::Release()
 	DELETE_A(targaData);
 }
 
-ID3D11ShaderResourceView* Texture::GetTexture()
+ID3D11ShaderResourceView* Texture::GetResourceView()
 {
 	return textureView;
 }

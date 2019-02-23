@@ -17,24 +17,14 @@ void Camera::SetRotation(Float3 rotation)
 	this->rotation = rotation;
 }
 
-void Camera::SetPosition(float x, float y, float z)
-{
-	SetPosition(Float3(x, y, z));
-}
-
-void Camera::SetRotation(float x, float y, float z)
-{
-	SetRotation(Float3(x, y, z));
-}
-
 Float3 Camera::GetPosition()
 {
-	return Float3(position);
+	return position;
 }
 
 Float3 Camera::GetRotation()
 {
-	return Float3(rotation);
+	return rotation;
 }
 
 void Camera::Render()
@@ -49,11 +39,9 @@ void Camera::Render()
 	positionVector = DirectX::XMLoadFloat3(&position);
 	lookAtVector = DirectX::XMLoadFloat3(&lookAt);
 
-	const float rad = 0.0174532925f;
-
-	pitch = rotation.x * rad;
-	yaw = rotation.y * rad;
-	roll = rotation.z * rad;
+	pitch = rotation.x * DEG_TO_RAD;
+	yaw = rotation.y * DEG_TO_RAD;
+	roll = rotation.z * DEG_TO_RAD;
 
 	rotationMatrix = DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
 

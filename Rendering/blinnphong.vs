@@ -3,7 +3,7 @@ cbuffer UniformBuffer
 	matrix world;
 	matrix view;
 	matrix projection;
-	float3 lightPos;
+	float4 lightPos;
 
 	float4 diffuseAlbedo;
 	float4 specularAlbedo;
@@ -14,29 +14,37 @@ struct VertexInputType
 {
 	float4 position : POSITION;
 	float4 color : COLOR;
-	float4 normal : NORMAL;
+	float2 tex : TEXCOORD;
+	float3 normal : NORMAL;
 };
 
 struct PixelInputType
 {
 	float4 position : SV_POSITION;
 	float4 color : COLOR;
-	float4 worldPos : POSITION;
-	float3 normal : NORMAL;
+	float2 tex : TEXCOORD0;
+	float3 V : V;
+	float3 N : N;
+	float3 L : L;
 };
 
 PixelInputType main(VertexInputType input)
 {
 	PixelInputType output;
-
+	
 	input.position.w = 1.0f;
 
-	output.position = mul(input.position, world);
-	output.position = mul(output.position, view);
-	output.position = mul(output.position, projection);
-	
+	matrix mv = mul(world, view);
+	float4 p = mul(input.position, mv);
+
+	output.N = mul(input.normal, (float3x3)mv);
+	output.L = mul(lightPos, view) - p.xyz;
+	output.V = -p.xyz;
+
+	output.position = mul(p, projection);
+
 	output.color = input.color;
-	output.normal = normalize(mul(input.normal, (float3x3)world));
+	output.tex = input.tex;
 
 	return output;
 }

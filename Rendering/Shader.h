@@ -20,6 +20,9 @@ public:
 	virtual bool Initialize(ID3D11Device* device, HWND hwnd) = 0;
 	virtual void Release();
 
+	void SetTexture(ID3D11ShaderResourceView* textureView);
+	ID3D11ShaderResourceView* GetTexture();
+
 protected:
 	bool InitializeShader(ID3D11Device* device, HWND hwnd, LPCWSTR vertexShaderPath, LPCWSTR pixelShaderPath);
 	void ReleaseShader();
@@ -35,9 +38,10 @@ private:
 	ID3D11InputLayout* layout = nullptr;
 	ID3D11Buffer* uniformBuffer = nullptr;
 	ID3D11SamplerState* samplerState = nullptr;
+	ID3D11ShaderResourceView* textureView = nullptr;
 
 	static bool initializedStatic;
-	static D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
+	static D3D11_INPUT_ELEMENT_DESC polygonLayout[4];
 	static unsigned int layoutElementCount;
 	static D3D11_BUFFER_DESC uniformBufferDesc;
 	static D3D11_SAMPLER_DESC samplerDesc;

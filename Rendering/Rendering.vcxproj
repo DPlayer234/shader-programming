@@ -156,8 +156,8 @@
     <ClInclude Include="DX3D.h" />
     <ClInclude Include="GraphicsManager.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="KeyCode.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="ModelDefinitions.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Texture.h" />

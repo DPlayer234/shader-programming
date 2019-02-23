@@ -16,6 +16,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{4a218e46-ea7f-402a-925f-a18ad72117d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{bd2e2a56-f6a9-425c-8dac-66c228c5117b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -89,9 +92,6 @@
     <ClInclude Include="CubeModel.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="ModelDefinitions.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="UniformBufferType.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -102,6 +102,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="BlinnPhongShader.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyCode.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

@@ -32,6 +32,7 @@ private:
 	bool vsyncEnabled;
 	int videoCardMemory;
 	char videoCardDescription[128];
+
 	IDXGISwapChain* swapChain = nullptr;
 	ID3D11Device* device = nullptr;
 	ID3D11DeviceContext* deviceContext = nullptr;
@@ -43,5 +44,38 @@ private:
 
 	Matrix projectionMatrix;
 	Matrix orthoMatrix;
+
+	// Used format (32bit)
+	const DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+	// Display mode flags
+	const UINT flags = DXGI_ENUM_MODES_INTERLACED;
+
+	// Gets the best supported display mode
+	bool GetDisplayMode(DXGI_MODE_DESC* displayMode, int screenWidth, int screenHeight, IDXGIOutput* adapterOutput);
+
+	// Loads the description of the video card in videoCardMemory and videoCardDescription
+	bool LoadVideoCardDesc(IDXGIAdapter* adapter);
+
+	// Buffer Swapping Settings
+	bool GetSwapChainDesc(DXGI_SWAP_CHAIN_DESC* swapChainDesc, HWND hwnd, DXGI_MODE_DESC displayMode, bool fullscreen);
+
+	// Gets the Feature Level (Should be DirectX 11.0)
+	bool GetFeatureLevel(D3D_FEATURE_LEVEL* featureLevel);
+
+	// Description of the depth buffer texture
+	bool GetDepthBufferDesc(D3D11_TEXTURE2D_DESC* depthBufferDesc, int screenWidth, int screenHeight);
+
+	// Description of the depth stencil buffer
+	bool GetDepthStencilDesc(D3D11_DEPTH_STENCIL_DESC* depthStencilDesc);
+
+	// Description of the depth stencil view
+	bool GetDepthStencilViewDesc(D3D11_DEPTH_STENCIL_VIEW_DESC* depthStencilViewDesc);
+
+	// Description of the rasterizer
+	bool GetRasterizerDesc(D3D11_RASTERIZER_DESC* rasterizerDesc);
+
+	// Viewport Dimensions and other
+	bool GetViewport(D3D11_VIEWPORT* viewport, int screenWidth, int screenHeight);
 };
 

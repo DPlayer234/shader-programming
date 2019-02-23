@@ -1,5 +1,14 @@
 #pragma once
 
+// PI Constant
+const float PI = 3.14159265359f;
+
+// Multiply to convert radians to degrees
+const float RAD_TO_DEG = 180.0f / PI;
+
+// Multiply to convert degrees to radians
+const float DEG_TO_RAD = 1.0f / RAD_TO_DEG;
+
 #define RELEASE(var) \
 	if (var) { \
 		(var)->Release(); \

@@ -1,5 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
+#include "defines.h"
 #include "typedefs.h"
 
 class Camera
@@ -9,9 +10,6 @@ public:
 
 	void SetPosition(Float3 position);
 	void SetRotation(Float3 rotation);
-
-	void SetPosition(float x, float y, float z);
-	void SetRotation(float x, float y, float z);
 
 	Float3 GetPosition();
 	Float3 GetRotation();

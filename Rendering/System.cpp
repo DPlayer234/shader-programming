@@ -38,9 +38,7 @@ void System::Run()
 			}
 
 			UpdateHighFrequencyTimer();
-
-			totalTime += deltaTime;
-			graphics->Update(totalTime);
+			graphics->Update(deltaTime);
 		}
 	}
 }
@@ -79,6 +77,8 @@ bool System::Initialize()
 	if (!graphics) return false;
 	result = graphics->Initialize(screenWidth, screenHeight, windowHandle);
 	if (!result) return false;
+
+	graphics->input = input;
 
 	return true;
 }

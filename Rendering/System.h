@@ -5,6 +5,8 @@
 
 #define WIN32_LEAN_AND_MEAN
 
+class GraphicsManager;
+
 class System
 {
 public:

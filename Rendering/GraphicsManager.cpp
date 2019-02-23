@@ -1,6 +1,13 @@
 #include "GraphicsManager.h"
 
-#include "ModelDefinitions.h"
+#include <math.h>
+#include "defines.h"
+
+#include "CubeModel.h"
+#include "UnlitShader.h"
+#include "BlinnPhongShader.h"
+
+#include "KeyCode.h"
 
 GraphicsManager::GraphicsManager()
 {
@@ -16,10 +23,74 @@ bool GraphicsManager::Frame()
 	return true;
 }
 
-void GraphicsManager::Update(float totalTime)
+void GraphicsManager::Update(float deltaTime)
 {
-	Float3 rotation(0.0f, totalTime * 20.0f, 0.0f);
-	models[0]->SetRotation(DirectX::XMLoadFloat3(&rotation));
+	const static float MOVE_SPEED = 5.0f;
+	const static float ROT_SPEED = 120.0f;
+
+	Float3 position = camera->GetPosition();
+	Float3 rotation = camera->GetRotation();
+
+	float yRRadians = rotation.y * DEG_TO_RAD;
+	float fMoveSpeed = MOVE_SPEED * deltaTime;
+	float fRotSpeed = ROT_SPEED * deltaTime;
+
+	if (IsKeyDown(KeyCode_W))
+	{
+		position.x += sin(yRRadians) * fMoveSpeed;
+		position.z += cos(yRRadians) * fMoveSpeed;
+	}
+
+	if (IsKeyDown(KeyCode_S))
+	{
+		position.x -= sin(yRRadians) * fMoveSpeed;
+		position.z -= cos(yRRadians) * fMoveSpeed;
+	}
+
+	if (IsKeyDown(KeyCode_A))
+	{
+		position.x -= cos(yRRadians) * fMoveSpeed;
+		position.z += sin(yRRadians) * fMoveSpeed;
+	}
+
+	if (IsKeyDown(KeyCode_D))
+	{
+		position.x += cos(yRRadians) * fMoveSpeed;
+		position.z -= sin(yRRadians) * fMoveSpeed;
+	}
+
+	if (IsKeyDown(KeyCode_Q))
+	{
+		position.y -= fMoveSpeed;
+	}
+
+	if (IsKeyDown(KeyCode_E))
+	{
+		position.y += fMoveSpeed;
+	}
+
+	if (IsKeyDown(KeyCode_Left))
+	{
+		rotation.y -= fRotSpeed;
+	}
+
+	if (IsKeyDown(KeyCode_Right))
+	{
+		rotation.y += fRotSpeed;
+	}
+
+	if (IsKeyDown(KeyCode_Up))
+	{
+		rotation.x -= fRotSpeed;
+	}
+
+	if (IsKeyDown(KeyCode_Down))
+	{
+		rotation.x += fRotSpeed;
+	}
+
+	camera->SetPosition(position);
+	camera->SetRotation(rotation);
 }
 
 bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd)
@@ -47,17 +118,19 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	camera = new Camera;
 	if (!camera) return false;
 
-	camera->SetPosition(0.0f, 0.8f, -1.0f);
-	camera->SetRotation(20.0f, 0.0f, 0.0f);
+	camera->SetPosition(Float3(0.0f, 0.8f, -2.0f));
+	camera->SetRotation(Float3(20.0f, 0.0f, 0.0f));
 
-#pragma region Add Models
-	Float3 position;
+#pragma region First Model
+	auto model1 = AddModel<CubeModel>();
+	auto shader1 = LoadShader<BlinnPhongShader>();
+	auto stone01 = LoadTexture("data/stone01.tga");
 
-	Model* model = AddModel<CubeModelBP>();
-	if (!model) return false;
+	if (!model1 || !shader1 || !stone01) return false;
 
-	position = Float3(0.0f, 0.0f, 0.0f);
-	model->SetPosition(DirectX::XMLoadFloat3(&position));
+	model1->SetPosition(Float3(0.0f, 0.0f, 0.0f));
+	shader1->SetTexture(stone01->GetResourceView());
+	model1->SetShader(shader1);
 #pragma endregion
 
 	return true;
@@ -76,18 +149,56 @@ void GraphicsManager::Release()
 	models.clear();
 }
 
+bool GraphicsManager::IsKeyDown(unsigned int key)
+{
+	return input
+		? input->IsKeyDown(key)
+		: false;
+}
+
 template<class T>
-Model* GraphicsManager::AddModel()
+T* GraphicsManager::AddModel()
 {
 	bool result;
 
-	Model* model = new T;
+	T* model = new T;
+	if (!model) return false;
+
 	result = model->Initialize(dx3d->GetDevice(), this->hwnd);
 	if (!result) return nullptr;
 
 	models.push_back(model);
 
 	return model;
+}
+
+template<class T>
+T* GraphicsManager::LoadShader()
+{
+	bool result;
+
+	T* shader = new T;
+	if (!shader) return nullptr;
+
+	result = shader->Initialize(dx3d->GetDevice(), this->hwnd);
+	if (!result) return nullptr;
+
+	shaders.push_back(shader);
+
+	return shader;
+}
+
+Texture* GraphicsManager::LoadTexture(const char * filename)
+{
+	Texture* texture = new Texture;
+	if (!texture) return false;
+
+	bool result = texture->Initialize(dx3d->GetDevice(), dx3d->GetDeviceContext(), filename);
+	if (!result) return false;
+
+	textures.push_back(texture);
+
+	return texture;
 }
 
 bool GraphicsManager::Render()
@@ -103,7 +214,7 @@ bool GraphicsManager::Render()
 	camera->GetViewMatrix(&view);
 	dx3d->GetProjectionMatrix(&projection);
 
-	Float3 lightPos(100.0f, 100.0f, 100.0f);
+	Float3 lightPos(100.0f, 100.0f, -100.0f);
 
 	bool result;
 

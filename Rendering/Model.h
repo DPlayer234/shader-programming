@@ -23,10 +23,15 @@ public:
 		return indexCount;
 	};
 
-	void SetPosition(Vector position);
-	void SetRotation(Vector rotation);
-	void SetScale(Vector scale);
+	void SetPosition(Float3 position);
+	void SetRotation(Float3 rotation);
+	void SetScale(Float3 scale);
 
+	Float3 GetPosition();
+	Float3 GetRotation();
+	Float3 GetScale();
+
+	void SetShader(Shader* shader);
 	Shader* GetShader();
 
 	Matrix GetWorldMatrix();
@@ -35,7 +40,7 @@ protected:
 	bool InitializeVertexBuffer(ID3D11Device* device);
 	bool InitializeIndexBuffer(ID3D11Device* device);
 
-	virtual bool InitializeShader(ID3D11Device* device, HWND hwnd) = 0;
+	virtual void ReleaseArrays();
 	virtual bool CreateVertexArray() = 0;
 	virtual bool CreateIndexArray() = 0;
 
@@ -49,9 +54,9 @@ protected:
 	UINT* indexArray = nullptr;
 	Vertex* vertexArray = nullptr;
 
-	Float3 position = Float3(0.f, 0.f, 0.f);
-	Float3 rotation = Float3(0.f, 0.f, 0.f);
-	Float3 scale = Float3(1.f, 1.f, 1.f);
+	Float3 position = Float3(0.0f, 0.0f, 0.0f);
+	Float3 rotation = Float3(0.0f, 0.0f, 0.0f);
+	Float3 scale = Float3(1.0f, 1.0f, 1.0f);
 	Float4x4 worldMatrix;
 };
 

@@ -8,22 +8,21 @@ bool Model::Initialize(ID3D11Device* device, HWND hwnd)
 {
 	if (!InitializeVertexBuffer(device)) return false;
 	if (!InitializeIndexBuffer(device)) return false;
-	if (!InitializeShader(device, hwnd)) return false;
 
 	return true;
 }
 
 void Model::Release()
 {
-	// DELETE_A(vertexArray);
-	// DELETE_A(indexArray);
+	RELEASE_N(vertexBuffer);
+	RELEASE_N(indexBuffer);
 }
 
 void Model::Update(float deltaTime)
 {
 }
 
-bool Model::Render(ID3D11DeviceContext* context, const Matrix& view, const Matrix& projection, const Float3& LightPos)
+bool Model::Render(ID3D11DeviceContext* context, const Matrix& view, const Matrix& projection, const Float3& lightPos)
 {
 	if (!shader) return false;
 
@@ -39,24 +38,44 @@ bool Model::Render(ID3D11DeviceContext* context, const Matrix& view, const Matri
 	uniforms.World = GetWorldMatrix();
 	uniforms.View = view;
 	uniforms.Projection = projection;
-	uniforms.LightPos = LightPos;
+	uniforms.LightPos = Float4(lightPos.x, lightPos.y, lightPos.z, 1.0f);
 
 	return shader->Render(context, GetIndexCount(), uniforms);
 }
 
-void Model::SetPosition(Vector position)
+void Model::SetPosition(Float3 position)
 {
-	DirectX::XMStoreFloat3(&this->position, position);
+	this->position = position;
 }
 
-void Model::SetRotation(Vector rotation)
+void Model::SetRotation(Float3 rotation)
 {
-	DirectX::XMStoreFloat3(&this->rotation, rotation);
+	this->rotation = rotation;
 }
 
-void Model::SetScale(Vector scale)
+void Model::SetScale(Float3 scale)
 {
-	DirectX::XMStoreFloat3(&this->scale, scale);
+	this->scale = scale;
+}
+
+Float3 Model::GetPosition()
+{
+	return position;
+}
+
+Float3 Model::GetRotation()
+{
+	return rotation;
+}
+
+Float3 Model::GetScale()
+{
+	return scale;
+}
+
+void Model::SetShader(Shader* shader)
+{
+	this->shader = shader;
 }
 
 Shader* Model::GetShader()
@@ -120,4 +139,10 @@ bool Model::InitializeIndexBuffer(ID3D11Device* device)
 	if (FAILED(result)) return false;
 
 	return true;
+}
+
+void Model::ReleaseArrays()
+{
+	DELETE_A(vertexArray);
+	DELETE_A(indexArray);
 }

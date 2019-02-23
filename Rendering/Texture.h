@@ -11,7 +11,7 @@ public:
 
 	bool Initialize(ID3D11Device* device, ID3D11DeviceContext* context, const char* fileName);
 	void Release();
-	ID3D11ShaderResourceView* GetTexture();
+	ID3D11ShaderResourceView* GetResourceView();
 
 private:
 	bool LoadTarga(const char* fileName, int* width, int* height);
