@@ -1,15 +1,5 @@
 #include "Shader.h"
 
-bool Shader::Initialize(ID3D11Device* device, HWND hwnd)
-{
-	bool result;
-
-	result = InitializeShader(device, hwnd, L"texture.vs", L"texture.ps");
-	if (!result) return false;
-
-	return true;
-}
-
 void Shader::Release()
 {
 	ReleaseShader();

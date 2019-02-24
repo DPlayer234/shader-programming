@@ -107,7 +107,7 @@ void System::InitializeWindow(int& width, int& height)
 	ApplicationHandle = this;
 
 	hInstance = GetModuleHandle(NULL);
-	applicationName = L"Engine";
+	applicationName = L"Direct3D Rendering Engine?";
 
 	window.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	window.lpfnWndProc = WndProc;

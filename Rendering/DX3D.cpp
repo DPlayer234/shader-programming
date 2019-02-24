@@ -40,6 +40,9 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 	// Description of the depth stencil view
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 
+	// Description of the blend state
+	D3D11_BLEND_DESC blendDesc;
+
 	// Description of the rasterizer
 	D3D11_RASTERIZER_DESC rasterizerDesc;
 
@@ -118,6 +121,14 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 #pragma endregion
 
 	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+
+	okay = GetBlendDesc(&blendDesc);
+	if (!okay) return false;
+
+	result = device->CreateBlendState(&blendDesc, &blendState);
+	if (FAILED(result)) return false;
+
+	deviceContext->OMSetBlendState(blendState, nullptr, 0xffffffff);
 
 #pragma region Rasterizer
 	okay = GetRasterizerDesc(&rasterizerDesc);
@@ -393,6 +404,32 @@ bool DX3D::GetRasterizerDesc(D3D11_RASTERIZER_DESC* _rasterizerDesc)
 	rasterizerDesc.MultisampleEnable = false;
 	rasterizerDesc.ScissorEnable = false;
 	rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+
+	return true;
+}
+
+bool DX3D::GetBlendDesc(D3D11_BLEND_DESC* _blendDesc)
+{
+	D3D11_BLEND_DESC& blendDesc = *_blendDesc;
+
+	ZeroMemory(&blendDesc, sizeof(blendDesc));
+
+	blendDesc.AlphaToCoverageEnable = false;
+	blendDesc.IndependentBlendEnable = false;
+
+	auto& renderTargetBlendDesc = blendDesc.RenderTarget[0];
+
+	renderTargetBlendDesc.BlendEnable = true;
+
+	renderTargetBlendDesc.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	renderTargetBlendDesc.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	renderTargetBlendDesc.BlendOp = D3D11_BLEND_OP_ADD;
+
+	renderTargetBlendDesc.SrcBlendAlpha = D3D11_BLEND_ONE;
+	renderTargetBlendDesc.DestBlendAlpha = D3D11_BLEND_ZERO;
+	renderTargetBlendDesc.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+
+	renderTargetBlendDesc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 	return true;
 }

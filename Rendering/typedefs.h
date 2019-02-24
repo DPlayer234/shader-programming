@@ -2,6 +2,8 @@
 
 #include <DirectXMath.h>
 
+/* This file defines a few nicer declarations for some common DirectX types */
+
 typedef DirectX::XMVECTOR Vector;
 
 typedef DirectX::XMFLOAT2 Float2;

@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include "Skybox.h"
 
+/* Define various variables describing the render state */
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = false;
 const float SCREEN_DEPTH = 1000.0f;
@@ -17,38 +18,66 @@ const float FIELD_OF_VIEW = DirectX::XM_PI / 2.0f;
 
 class System;
 
+// Manages graphics state related operations.
 class GraphicsManager
 {
 	friend class System;
 
 public:
+	// Initializes the GraphicsManager and all its sub-components
 	bool Initialize(int screenWidth, int screenHeight, HWND hwnd);
+
+	// Releases all memory associated with this object
 	void Release();
 
+	// Renders a frame to the screen
 	bool Frame();
+
+	// Updates the state. deltaTime describes the time since the last update.
 	void Update(float deltaTime);
 
-	bool IsKeyDown(unsigned int);
-
+	// Adds a model to the models vector to be rendered and returns it
 	template<class T>
 	T* AddModel();
 
+	// Loads a shader, adds it to the shaders vector and returns it
 	template<class T>
 	T* LoadShader();
 
+	// Loads a texture, adds it to the textures vector and returns it
 	Texture* LoadTexture(const char* filename);
 
 private:
+	// Wraps input->IsKeyDown
+	bool IsKeyDown(unsigned int);
+
+	// Renders a frame; does the actual handling and is called within GraphicsManager::Frame()
 	bool Render();
 
+	// The input manager. Written to by System
 	InputManager* input = nullptr;
+
+	// The camera used for screen-space projections
 	Camera* camera = nullptr;
+
+	// The DX3D Object used for rendering
 	DX3D* dx3d = nullptr;
+
+	// The handle to the rendering window
 	HWND hwnd;
 
+	// The pointer to the skybox model
 	Skybox* skybox;
+
+	/* Storage vectors */
+
+	// Stores all created models
 	std::vector<Model*> models;
+
+	// Stores all loaded shaders
 	std::vector<Shader*> shaders;
+
+	// Stores all loaded textures
 	std::vector<Texture*> textures;
 };
 

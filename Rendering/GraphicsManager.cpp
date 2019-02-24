@@ -34,11 +34,13 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 #pragma endregion
 
+#pragma region Camera
 	camera = new Camera;
 	if (!camera) return false;
 
 	camera->SetPosition(Float3(0.0f, 0.8f, -2.0f));
 	camera->SetRotation(Float3(20.0f, 0.0f, 0.0f));
+#pragma endregion
 
 #pragma region Skybox
 	skybox = AddModel<Skybox>();
@@ -97,13 +99,14 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 #pragma region Glass Box
 	auto glassBox = AddModel<CubeModel>();
-	auto glassBoxShader = LoadShader<UnlitShader>();
+	auto glassBoxShader = LoadShader<BlinnPhongShader>();
 	auto glassBoxTexture = LoadTexture("data/glass.tga");
 
 	if (!glassBox || !glassBoxShader || !glassBoxTexture) return false;
 
 	glassBox->SetPosition(Float3(-3.0f, 0.0f, 0.0f));
 	glassBoxShader->SetTexture(glassBoxTexture->GetResourceView());
+	glassBoxShader->SpecularAlbedo = Float4(1.0f, 1.0f, 1.0f, 1.5f);
 	glassBox->SetShader(glassBoxShader);
 #pragma endregion
 
@@ -115,12 +118,13 @@ void GraphicsManager::Release()
 	DELETE_P(camera);
 	RELEASE(dx3d);
 
-	for (Model* model : models)
-	{
-		RELEASE(model);
-	}
+	for (Model* model : models) RELEASE(model);
+	for (Shader* shader : shaders) RELEASE(shader);
+	for (Texture* texture : textures) RELEASE(texture);
 
 	models.clear();
+	shaders.clear();
+	textures.clear();
 }
 
 bool GraphicsManager::Frame()
@@ -204,13 +208,6 @@ void GraphicsManager::Update(float deltaTime)
 	camera->SetRotation(rotation);
 }
 
-bool GraphicsManager::IsKeyDown(unsigned int key)
-{
-	return input
-		? input->IsKeyDown(key)
-		: false;
-}
-
 template<class T>
 T* GraphicsManager::AddModel()
 {
@@ -256,13 +253,20 @@ Texture* GraphicsManager::LoadTexture(const char * filename)
 	return texture;
 }
 
+bool GraphicsManager::IsKeyDown(unsigned int key)
+{
+	return input
+		? input->IsKeyDown(key)
+		: false;
+}
+
 bool GraphicsManager::Render()
 {
 	Matrix view, projection;
 	auto context = dx3d->GetDeviceContext();
 
 	// First layer, Background/Skybox/etc.
-	dx3d->BeginScene(0.1f, 0.1f, 0.1f, 1.0f);
+	dx3d->BeginScene();
 
 	camera->Render();
 

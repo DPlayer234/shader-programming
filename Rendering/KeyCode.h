@@ -2,6 +2,8 @@
 
 #include <Windows.h>
 
+/* Windows.h does not contain VK constants for all keys... so I add them myself */
+// Stores Virtual Key Code constants
 enum KeyCode {
 	KeyCode_Left = VK_LEFT,
 	KeyCode_Up = VK_UP,
