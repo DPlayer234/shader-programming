@@ -1,6 +1,16 @@
 #include "InputManager.h"
 
-InputManager::InputManager()
+bool InputManager::Initialize()
+{
+	for (int i = 0; i < InputManager::KEY_STATE_COUNT; i++)
+	{
+		keyStates[i] = false;
+	}
+
+	return true;
+}
+
+void InputManager::Release()
 {
 }
 
@@ -22,18 +32,4 @@ bool InputManager::IsKeyDown(unsigned int keyNum)
 bool InputManager::IsKeyUp(unsigned int keyNum)
 {
 	return !IsKeyDown(keyNum);
-}
-
-bool InputManager::Initialize()
-{
-	for (int i = 0; i < InputManager::KEY_STATE_COUNT; i++)
-	{
-		keyStates[i] = false;
-	}
-
-	return true;
-}
-
-void InputManager::Release()
-{
 }

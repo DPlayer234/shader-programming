@@ -1,21 +1,5 @@
 #include "Shader.h"
 
-Shader::Shader()
-{
-}
-
-bool Shader::Render(ID3D11DeviceContext* context, int indexCount, const UniformBufferType& uniforms)
-{
-	bool result;
-
-	result = SetShaderParamaters(context, uniforms);
-	if (!result) return false;
-
-	RenderShader(context, indexCount);
-
-	return true;
-}
-
 bool Shader::Initialize(ID3D11Device* device, HWND hwnd)
 {
 	bool result;
@@ -29,6 +13,18 @@ bool Shader::Initialize(ID3D11Device* device, HWND hwnd)
 void Shader::Release()
 {
 	ReleaseShader();
+}
+
+bool Shader::Render(ID3D11DeviceContext* context, int indexCount, const UniformBufferType& uniforms)
+{
+	bool result;
+
+	result = SetShaderParamaters(context, uniforms);
+	if (!result) return false;
+
+	RenderShader(context, indexCount);
+
+	return true;
 }
 
 void Shader::SetTexture(ID3D11ShaderResourceView* textureView)

@@ -3,10 +3,6 @@
 #include <math.h>
 #include "Float3Math.h"
 
-PyramidModel::PyramidModel()
-{
-}
-
 void PyramidModel::ReleaseArrays()
 {
 	// Do not delete the arrays; points to static memory.

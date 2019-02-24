@@ -7,17 +7,17 @@
 class Texture
 {
 public:
-	Texture();
-
 	bool Initialize(ID3D11Device* device, ID3D11DeviceContext* context, const char* fileName);
 	void Release();
+
 	ID3D11ShaderResourceView* GetResourceView();
 
 private:
-	bool LoadTarga(const char* fileName, int* width, int* height);
 	unsigned char* targaData = nullptr;
 	ID3D11Texture2D* texture = nullptr;
 	ID3D11ShaderResourceView* textureView = nullptr;
+
+	bool LoadTarga(const char* fileName, int* width, int* height);
 
 	struct TargaHeader
 	{

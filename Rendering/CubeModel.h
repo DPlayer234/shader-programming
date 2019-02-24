@@ -4,9 +4,6 @@
 
 class CubeModel : public Model
 {
-public:
-	CubeModel();
-
 protected:
 	void ReleaseArrays() override;
 	bool CreateVertexArray() override;

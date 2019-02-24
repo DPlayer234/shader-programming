@@ -3,8 +3,6 @@
 class Skybox : public CubeModel
 {
 public:
-	Skybox();
-
 	void InitializeSkybox();
 
 protected:

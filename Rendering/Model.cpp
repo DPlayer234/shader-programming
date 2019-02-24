@@ -1,9 +1,5 @@
 #include "Model.h"
 
-Model::Model()
-{
-}
-
 bool Model::Initialize(ID3D11Device* device, HWND hwnd)
 {
 	if (!InitializeVertexBuffer(device)) return false;
@@ -16,10 +12,6 @@ void Model::Release()
 {
 	RELEASE_N(vertexBuffer);
 	RELEASE_N(indexBuffer);
-}
-
-void Model::Update(float deltaTime)
-{
 }
 
 bool Model::Render(ID3D11DeviceContext* context, const Matrix& view, const Matrix& projection, const Float3& lightPos)
@@ -41,6 +33,11 @@ bool Model::Render(ID3D11DeviceContext* context, const Matrix& view, const Matri
 	uniforms.LightPos = Float4(lightPos.x, lightPos.y, lightPos.z, 1.0f);
 
 	return shader->Render(context, GetIndexCount(), uniforms);
+}
+
+UINT Model::GetIndexCount()
+{
+	return indexCount;
 }
 
 void Model::SetPosition(Float3 position)

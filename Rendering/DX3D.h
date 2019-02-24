@@ -13,7 +13,8 @@
 class DX3D
 {
 public:
-	DX3D();
+	bool Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, float screenDepth, float screenNear, float fieldOfView);
+	void Release();
 
 	void BeginScene(float r, float g, float b, float a);
 	void EndScene();
@@ -24,9 +25,6 @@ public:
 	void GetProjectionMatrix(Matrix* outputMatrix);
 	void GetOrthoMatrix(Matrix* outputMatrix);
 	void GetVideoCardInfo(char** cardName, int* memory);
-
-	bool Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, float screenDepth, float screenNear);
-	void Release();
 
 private:
 	bool vsyncEnabled;

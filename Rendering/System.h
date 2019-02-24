@@ -10,13 +10,11 @@ class GraphicsManager;
 class System
 {
 public:
-	System();
+	bool Initialize();
+	void Release();
 
 	void Run();
 	LRESULT CALLBACK MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
-
-	bool Initialize();
-	void Release();
 
 private:
 	bool Frame();

@@ -3,10 +3,6 @@
 #include <math.h>
 #include "Float3Math.h"
 
-CubeModel::CubeModel()
-{
-}
-
 void CubeModel::ReleaseArrays()
 {
 	DELETE_A(vertexArray);
@@ -63,7 +59,6 @@ void CubeModel::SetVertices(Vertex vertices[4], Float3 direction, Float3 offset1
 	vertices[2].Tex = uvBottomRight;
 	vertices[3].Tex = Float2(uvTopLeft.x, uvBottomRight.y);
 
-	//Float4 color(abs(direction.x), abs(direction.y), abs(direction.z), 1.0f);
 	Float4 color(1.0f, 1.0f, 1.0f, 1.0f);
 
 	vertices[0].Color = color;

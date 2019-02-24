@@ -6,8 +6,6 @@
 class Camera
 {
 public:
-	Camera();
-
 	void SetPosition(Float3 position);
 	void SetRotation(Float3 rotation);
 
@@ -18,8 +16,8 @@ public:
 	void GetViewMatrix(Matrix* outputMatrix);
 
 private:
-	Float3 position;
-	Float3 rotation;
-	Matrix viewMatrix;
+	Float3 position = Float3(0.0f, 0.0f, 0.0f);
+	Float3 rotation = Float3(0.0f, 0.0f, 0.0f);
+	Matrix viewMatrix = Matrix();
 };
 

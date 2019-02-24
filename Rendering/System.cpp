@@ -1,8 +1,37 @@
 #include "System.h"
 #include "defines.h"
 
-System::System()
+bool System::Initialize()
 {
+	bool result;
+	int screenWidth = 1;
+	int screenHeight = 1;
+
+	InitializeWindow(screenWidth, screenHeight);
+
+	input = new InputManager;
+	if (!input) return false;
+	result = input->Initialize();
+	if (!result) return false;
+
+	if (!InitializeHighFrequencyTimer()) return false;
+
+	graphics = new GraphicsManager;
+	if (!graphics) return false;
+	result = graphics->Initialize(screenWidth, screenHeight, windowHandle);
+	if (!result) return false;
+
+	graphics->input = input;
+
+	return true;
+}
+
+void System::Release()
+{
+	ShutdownWindow();
+
+	RELEASE(input);
+	RELEASE(graphics);
 }
 
 void System::Run()
@@ -56,39 +85,6 @@ LRESULT System::MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM l
 	default:
 		return DefWindowProc(hwnd, umessage, wparam, lparam);
 	}
-}
-
-bool System::Initialize()
-{
-	bool result;
-	int screenWidth = 1;
-	int screenHeight = 1;
-
-	InitializeWindow(screenWidth, screenHeight);
-
-	input = new InputManager;
-	if (!input) return false;
-	result = input->Initialize();
-	if (!result) return false;
-
-	if (!InitializeHighFrequencyTimer()) return false;
-
-	graphics = new GraphicsManager;
-	if (!graphics) return false;
-	result = graphics->Initialize(screenWidth, screenHeight, windowHandle);
-	if (!result) return false;
-
-	graphics->input = input;
-
-	return true;
-}
-
-void System::Release()
-{
-	ShutdownWindow();
-
-	RELEASE(input);
-	RELEASE(graphics);
 }
 
 bool System::Frame()

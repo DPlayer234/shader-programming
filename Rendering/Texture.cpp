@@ -1,9 +1,5 @@
 #include "Texture.h"
 
-Texture::Texture()
-{
-}
-
 bool Texture::Initialize(ID3D11Device* device, ID3D11DeviceContext* context, const char* fileName)
 {
 	bool result;

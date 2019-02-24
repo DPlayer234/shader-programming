@@ -13,12 +13,10 @@
 class Shader
 {
 public:
-	Shader();
-
-	bool Render(ID3D11DeviceContext* context, int indexCount, const UniformBufferType& uniforms);
-
 	virtual bool Initialize(ID3D11Device* device, HWND hwnd) = 0;
 	virtual void Release();
+
+	bool Render(ID3D11DeviceContext* context, int indexCount, const UniformBufferType& uniforms);
 
 	void SetTexture(ID3D11ShaderResourceView* textureView);
 	ID3D11ShaderResourceView* GetTexture();

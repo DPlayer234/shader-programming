@@ -5,14 +5,122 @@
 
 #include "CubeModel.h"
 #include "PyramidModel.h"
+#include "PlaneModel.h"
 
 #include "UnlitShader.h"
 #include "BlinnPhongShader.h"
 
 #include "KeyCode.h"
 
-GraphicsManager::GraphicsManager()
+bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 {
+	bool result;
+
+	this->hwnd = hwnd;
+
+#pragma region DirectX Initialization
+	dx3d = new DX3D;
+	if (!dx3d) return false;
+
+	result = dx3d->Initialize(
+		screenWidth, screenHeight, VSYNC_ENABLED, hwnd,
+		FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR, FIELD_OF_VIEW);
+
+	if (!result)
+	{
+		MessageBeep(MB_ICONERROR);
+		MessageBox(hwnd, L"Could not initialize DX3D.", L"Error", MB_OK);
+		return false;
+	}
+#pragma endregion
+
+	camera = new Camera;
+	if (!camera) return false;
+
+	camera->SetPosition(Float3(0.0f, 0.8f, -2.0f));
+	camera->SetRotation(Float3(20.0f, 0.0f, 0.0f));
+
+#pragma region Skybox
+	skybox = AddModel<Skybox>();
+	auto skyboxShader = LoadShader<UnlitShader>();
+	auto skyboxTexture = LoadTexture("data/skybox.tga");
+
+	if (!skybox || !skyboxShader || !skyboxTexture) return false;
+
+	skybox->InitializeSkybox();
+	skyboxShader->SetTexture(skyboxTexture->GetResourceView());
+	skybox->SetShader(skyboxShader);
+#pragma endregion
+
+#pragma region Floor Plane
+	auto floor = AddModel<PlaneModel>();
+	auto floorShader = LoadShader<BlinnPhongShader>();
+	auto floorTexture = LoadTexture("data/floor.tga");
+
+	if (!floor || !floorShader || !floorTexture) return false;
+
+	floor->SetPosition(Float3(0.0f, -0.5f, 0.0f));
+	floor->SetScale(Float3(5.0f, 5.0f, 5.0f));
+	floorShader->SetTexture(floorTexture->GetResourceView());
+	floorShader->SpecularPower = 4.0f;
+	floorShader->SpecularAlbedo = Float4(2.0f, 2.0f, 2.0f, 1.0f);
+	floor->SetShader(floorShader);
+#pragma endregion
+
+#pragma region Metal Box
+	auto metalBox = AddModel<CubeModel>();
+	auto metalBoxShader = LoadShader<BlinnPhongShader>();
+	auto metalBoxTexture = LoadTexture("data/metal.tga");
+
+	if (!metalBox || !metalBoxShader || !metalBoxTexture) return false;
+
+	metalBox->SetPosition(Float3(0.0f, 0.0f, 0.0f));
+	metalBoxShader->SetTexture(metalBoxTexture->GetResourceView());
+	metalBoxShader->SpecularPower = 6.0f;
+	metalBoxShader->SpecularAlbedo = Float4(1.5f, 1.5f, 1.5f, 1.0f);
+	metalBox->SetShader(metalBoxShader);
+#pragma endregion
+
+#pragma region Pyramid
+	auto pyramid = AddModel<PyramidModel>();
+	auto pyramidShader = LoadShader<BlinnPhongShader>();
+	auto pyramidTexture = LoadTexture("data/stone01.tga");
+
+	if (!pyramid || !pyramidShader || !pyramidTexture) return false;
+
+	pyramid->SetPosition(Float3(3.0f, 0.0f, 0.0f));
+	pyramidShader->SetTexture(pyramidTexture->GetResourceView());
+	pyramidShader->SpecularPower = 0.5f;
+	pyramidShader->SpecularAlbedo = Float4(0.5f, 0.5f, 0.5f, 1.0f);
+	pyramid->SetShader(pyramidShader);
+#pragma endregion
+
+#pragma region Glass Box
+	auto glassBox = AddModel<CubeModel>();
+	auto glassBoxShader = LoadShader<UnlitShader>();
+	auto glassBoxTexture = LoadTexture("data/glass.tga");
+
+	if (!glassBox || !glassBoxShader || !glassBoxTexture) return false;
+
+	glassBox->SetPosition(Float3(-3.0f, 0.0f, 0.0f));
+	glassBoxShader->SetTexture(glassBoxTexture->GetResourceView());
+	glassBox->SetShader(glassBoxShader);
+#pragma endregion
+
+	return true;
+}
+
+void GraphicsManager::Release()
+{
+	DELETE_P(camera);
+	RELEASE(dx3d);
+
+	for (Model* model : models)
+	{
+		RELEASE(model);
+	}
+
+	models.clear();
 }
 
 bool GraphicsManager::Frame()
@@ -27,6 +135,7 @@ bool GraphicsManager::Frame()
 
 void GraphicsManager::Update(float deltaTime)
 {
+	// Allow moving the camera with the keyboard
 	const static float MOVE_SPEED = 5.0f;
 	const static float ROT_SPEED = 120.0f;
 
@@ -93,85 +202,6 @@ void GraphicsManager::Update(float deltaTime)
 
 	camera->SetPosition(position);
 	camera->SetRotation(rotation);
-}
-
-bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd)
-{
-	bool result;
-
-	this->hwnd = hwnd;
-
-#pragma region DirectX Initialization
-	dx3d = new DX3D;
-	if (!dx3d) return false;
-
-	result = dx3d->Initialize(
-		screenWidth, screenHeight, VSYNC_ENABLED, hwnd,
-		FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
-
-	if (!result)
-	{
-		MessageBeep(MB_ICONERROR);
-		MessageBox(hwnd, L"Could not initialize DX3D.", L"Error", MB_OK);
-		return false;
-	}
-#pragma endregion
-
-	camera = new Camera;
-	if (!camera) return false;
-
-	camera->SetPosition(Float3(0.0f, 0.8f, -2.0f));
-	camera->SetRotation(Float3(20.0f, 0.0f, 0.0f));
-
-#pragma region Skybox
-	skybox = AddModel<Skybox>();
-	auto skyboxShader = LoadShader<UnlitShader>();
-	auto skyboxTexture = LoadTexture("data/skybox.tga");
-
-	if (!skybox || !skyboxShader || !skyboxTexture) return false;
-
-	skybox->InitializeSkybox();
-	skyboxShader->SetTexture(skyboxTexture->GetResourceView());
-	skybox->SetShader(skyboxShader);
-#pragma endregion
-
-#pragma region Model 1
-	auto model1 = AddModel<CubeModel>();
-	auto shader1 = LoadShader<BlinnPhongShader>();
-	auto stone01 = LoadTexture("data/stone01.tga");
-
-	if (!model1 || !shader1 || !stone01) return false;
-
-	model1->SetPosition(Float3(0.0f, 0.0f, 0.0f));
-	shader1->SetTexture(stone01->GetResourceView());
-	model1->SetShader(shader1);
-#pragma endregion
-
-#pragma region Model 2
-	auto model2 = AddModel<PyramidModel>();
-	auto shader2 = LoadShader<BlinnPhongShader>();
-
-	if (!model2 || !shader1 || !stone01) return false;
-
-	model2->SetPosition(Float3(3.0f, 0.0f, 0.0f));
-	shader2->SetTexture(stone01->GetResourceView());
-	model2->SetShader(shader2);
-#pragma endregion
-
-	return true;
-}
-
-void GraphicsManager::Release()
-{
-	DELETE_P(camera);
-	RELEASE(dx3d);
-
-	for (Model* model : models)
-	{
-		RELEASE(model);
-	}
-	
-	models.clear();
 }
 
 bool GraphicsManager::IsKeyDown(unsigned int key)

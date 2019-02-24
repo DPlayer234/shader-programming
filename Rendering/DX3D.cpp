@@ -1,65 +1,12 @@
 #include "DX3D.h"
 #include "defines.h"
 
-DX3D::DX3D()
-{
-}
-
-void DX3D::BeginScene(float r, float g, float b, float a)
-{
-	float color[4] = { r, g, b, a };
-
-	deviceContext->ClearRenderTargetView(renderTargetView, color);
-	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-}
-
-void DX3D::EndScene()
-{
-	if (vsyncEnabled)
-	{
-		swapChain->Present(1, 0);
-	}
-	else
-	{
-		swapChain->Present(0, 0);
-	}
-}
-
-ID3D11Device* DX3D::GetDevice()
-{
-	return device;
-}
-
-ID3D11DeviceContext* DX3D::GetDeviceContext()
-{
-	return deviceContext;
-}
-
-void DX3D::GetProjectionMatrix(Matrix* outputMatrix)
-{
-	*outputMatrix = projectionMatrix;
-}
-
-void DX3D::GetOrthoMatrix(Matrix* outputMatrix)
-{
-	*outputMatrix = orthoMatrix;
-}
-
-void DX3D::GetVideoCardInfo(char** cardName, int* memory)
-{
-	// *cardName = new char[128];
-	// strcpy_s(cardName, 128, videoCardDescription);
-
-	*cardName = videoCardDescription;
-	*memory = videoCardMemory;
-}
-
-bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, float screenDepth, float screenNear)
+bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, float screenDepth, float screenNear, float fieldOfView)
 {
 	HRESULT result;
 	bool okay;
 
-	float fieldOfView, screenAspect;
+	float screenAspect;
 	vsyncEnabled = vsync;
 
 #pragma region Init Variables
@@ -114,7 +61,7 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 
 	okay = GetDisplayMode(&displayMode, screenWidth, screenHeight, adapterOutput);
 	if (!okay) return false;
-	
+
 	LoadVideoCardDesc(adapter);
 
 	RELEASE_N(adapterOutput);
@@ -137,7 +84,7 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 		&device, nullptr, &deviceContext);
 
 	if (FAILED(result)) return false;
-	
+
 	result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
 	if (FAILED(result)) return false;
 
@@ -165,7 +112,7 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 
 	okay = GetDepthStencilViewDesc(&depthStencilViewDesc);
 	if (!okay) return false;
-	
+
 	result = device->CreateDepthStencilView(depthStencilBuffer, &depthStencilViewDesc, &depthStencilView);
 	if (FAILED(result)) return false;
 #pragma endregion
@@ -188,7 +135,6 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 
 	deviceContext->RSSetViewports(1, &viewport);
 
-	fieldOfView = (float)DirectX::XM_PI / 2.0f;
 	screenAspect = (float)screenWidth / (float)screenHeight;
 
 	projectionMatrix = DirectX::XMMatrixPerspectiveLH(fieldOfView, screenAspect, screenNear, screenDepth);
@@ -213,6 +159,56 @@ void DX3D::Release()
 	RELEASE_N(deviceContext);
 	RELEASE_N(device);
 	RELEASE_N(swapChain);
+}
+
+
+void DX3D::BeginScene(float r, float g, float b, float a)
+{
+	float color[4] = { r, g, b, a };
+
+	deviceContext->ClearRenderTargetView(renderTargetView, color);
+	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void DX3D::EndScene()
+{
+	if (vsyncEnabled)
+	{
+		swapChain->Present(1, 0);
+	}
+	else
+	{
+		swapChain->Present(0, 0);
+	}
+}
+
+ID3D11Device* DX3D::GetDevice()
+{
+	return device;
+}
+
+ID3D11DeviceContext* DX3D::GetDeviceContext()
+{
+	return deviceContext;
+}
+
+void DX3D::GetProjectionMatrix(Matrix* outputMatrix)
+{
+	*outputMatrix = projectionMatrix;
+}
+
+void DX3D::GetOrthoMatrix(Matrix* outputMatrix)
+{
+	*outputMatrix = orthoMatrix;
+}
+
+void DX3D::GetVideoCardInfo(char** cardName, int* memory)
+{
+	// *cardName = new char[128];
+	// strcpy_s(cardName, 128, videoCardDescription);
+
+	*cardName = videoCardDescription;
+	*memory = videoCardMemory;
 }
 
 bool DX3D::GetDisplayMode(DXGI_MODE_DESC* displayMode, int screenWidth, int screenHeight, IDXGIOutput* adapterOutput)

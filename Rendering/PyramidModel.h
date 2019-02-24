@@ -4,9 +4,6 @@
 
 class PyramidModel : public Model
 {
-public:
-	PyramidModel();
-
 protected:
 	void ReleaseArrays() override;
 	bool CreateVertexArray() override;

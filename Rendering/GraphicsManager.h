@@ -12,7 +12,8 @@
 const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = false;
 const float SCREEN_DEPTH = 1000.0f;
-const float SCREEN_NEAR = 0.1f;
+const float SCREEN_NEAR = 0.3f;
+const float FIELD_OF_VIEW = DirectX::XM_PI / 2.0f;
 
 class System;
 
@@ -21,13 +22,11 @@ class GraphicsManager
 	friend class System;
 
 public:
-	GraphicsManager();
+	bool Initialize(int screenWidth, int screenHeight, HWND hwnd);
+	void Release();
 
 	bool Frame();
-
-	bool Initialize(int screenWidth, int screenHeight, HWND hwnd);
 	void Update(float deltaTime);
-	void Release();
 
 	bool IsKeyDown(unsigned int);
 

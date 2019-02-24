@@ -1,9 +1,5 @@
 #include "Skybox.h"
 
-Skybox::Skybox()
-{
-}
-
 void Skybox::InitializeSkybox()
 {
 	SetScale(Float3(skyboxBoundSize, skyboxBoundSize, skyboxBoundSize));

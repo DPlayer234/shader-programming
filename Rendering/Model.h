@@ -10,18 +10,12 @@
 class Model
 {
 public:
-	Model();
-
 	bool Initialize(ID3D11Device* device, HWND hwnd);
 	void Release();
 
-	virtual void Update(float deltaTime);
 	bool Render(ID3D11DeviceContext* context, const Matrix& view, const Matrix& projection, const Float3& LightPos);
 
-	UINT GetIndexCount()
-	{
-		return indexCount;
-	};
+	UINT GetIndexCount();
 
 	void SetPosition(Float3 position);
 	void SetRotation(Float3 rotation);

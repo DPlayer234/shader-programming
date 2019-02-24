@@ -1,12 +1,5 @@
 #include "Camera.h"
 
-Camera::Camera() :
-	position(0.0f, 0.0f, 0.0f),
-	rotation(0.0f, 0.0f, 0.0f),
-	viewMatrix()
-{
-}
-
 void Camera::SetPosition(Float3 position)
 {
 	this->position = position;
