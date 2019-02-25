@@ -72,7 +72,7 @@
     <ClCompile Include="MateShader.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="RoughShader.cpp">
+    <ClCompile Include="GlitterShader.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -140,7 +140,7 @@
     <ClInclude Include="MateShader.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="RoughShader.h">
+    <ClInclude Include="GlitterShader.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
@@ -148,28 +148,28 @@
     <Text Include="shader-error-log.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BlinnPhong.ps">
+    <None Include="BlinnPhong.ps.hlsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="BlinnPhong.vs">
+    <None Include="BlinnPhong.vs.hlsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Unlit.ps">
+    <None Include="Mate.ps.hlsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Unlit.vs">
+    <None Include="Mate.vs.hlsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Mate.ps">
+    <None Include="Glitter.ps.hlsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Mate.vs">
+    <None Include="Glitter.vs.hlsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Rough.ps">
+    <None Include="Unlit.ps.hlsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Rough.vs">
+    <None Include="Unlit.vs.hlsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

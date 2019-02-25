@@ -147,7 +147,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="PlaneModel.cpp" />
     <ClCompile Include="PyramidModel.cpp" />
-    <ClCompile Include="RoughShader.cpp" />
+    <ClCompile Include="GlitterShader.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="System.cpp" />
@@ -168,7 +168,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="PlaneModel.h" />
     <ClInclude Include="PyramidModel.h" />
-    <ClInclude Include="RoughShader.h" />
+    <ClInclude Include="GlitterShader.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="System.h" />
@@ -182,14 +182,14 @@
     <Text Include="shader-error-log.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BlinnPhong.ps" />
-    <None Include="BlinnPhong.vs" />
-    <None Include="Mate.ps" />
-    <None Include="Mate.vs" />
-    <None Include="Rough.ps" />
-    <None Include="Rough.vs" />
-    <None Include="Unlit.ps" />
-    <None Include="Unlit.vs" />
+    <None Include="BlinnPhong.ps.hlsl" />
+    <None Include="BlinnPhong.vs.hlsl" />
+    <None Include="Mate.ps.hlsl" />
+    <None Include="Mate.vs.hlsl" />
+    <None Include="Glitter.ps.hlsl" />
+    <None Include="Glitter.vs.hlsl" />
+    <None Include="Unlit.ps.hlsl" />
+    <None Include="Unlit.vs.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="data\Circle.tga" />

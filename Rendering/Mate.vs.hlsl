@@ -47,7 +47,7 @@ PixelInputType main(VertexInputType input)
 	output.N = mul(input.normal, (float3x3)mv);
 
 	// Get the light direction in relation to the camera
-	output.L = mul(lightPos, view) - p.xyz;
+	output.L = mul(lightPos, view).xyz - p.xyz;
 
 	// Calculate the screen position of the vertex
 	output.position = mul(p, projection);

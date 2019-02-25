@@ -4,7 +4,7 @@ bool GlitterShader::Initialize(ID3D11Device* device, HWND hwnd)
 {
 	bool result;
 
-	result = InitializeShader(device, hwnd, L"Glitter.vs", L"Glitter.ps");
+	result = InitializeShader(device, hwnd, L"Glitter.vs.hlsl", L"Glitter.ps.hlsl");
 	if (!result) return false;
 
 	return true;
