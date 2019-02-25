@@ -67,6 +67,12 @@ private:
 	// The pointer to the skybox model
 	Skybox* skybox = nullptr;
 
+	// Position of the light
+	Float3 lightPos = Float3(100.0f, 100.0f, -100.0f);
+
+	// Model representing the light
+	Model* lightModel = nullptr;
+
 	/* Storage vectors */
 
 	// Stores all created models

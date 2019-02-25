@@ -57,6 +57,18 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd, I
 	skybox->SetShader(skyboxShader);
 #pragma endregion
 
+#pragma region Light
+	lightModel = AddModel<CubeModel>();
+	auto lightShader = LoadShader<UnlitShader>();
+	auto lightTexture = LoadTexture("data/circle.tga");
+
+	if (!lightModel || !lightShader || !lightTexture) return false;
+
+	lightModel->SetScale(Float3(0.1f, 0.1f, 0.1f));
+	lightShader->SetTexture(lightTexture->GetResourceView());
+	lightModel->SetShader(lightShader);
+#pragma endregion
+
 #pragma region Floor Plane
 	auto floor = AddModel<PlaneModel>();
 	auto floorShader = LoadShader<BlinnPhongShader>();
@@ -225,6 +237,11 @@ void GraphicsManager::Update(float deltaTime)
 	camera->SetPosition(position);
 	camera->SetRotation(rotation);
 #pragma endregion
+
+	if (IsKeyDown(KeyCode_L))
+	{
+		lightPos = position;
+	}
 }
 
 template<class T>
@@ -291,11 +308,10 @@ bool GraphicsManager::Render()
 
 	// Make sure skybox is centered around camera
 	skybox->SetPosition(camera->GetPosition());
+	lightModel->SetPosition(lightPos);
 
 	camera->GetViewMatrix(&view);
 	dx3d->GetProjectionMatrix(&projection);
-
-	Float3 lightPos(100.0f, 100.0f, -100.0f);
 
 	bool result;
 
