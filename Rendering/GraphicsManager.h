@@ -14,18 +14,16 @@ const bool FULL_SCREEN = false;
 const bool VSYNC_ENABLED = false;
 const float SCREEN_DEPTH = 1000.0f;
 const float SCREEN_NEAR = 0.3f;
-const float FIELD_OF_VIEW = DirectX::XM_PI / 2.0f;
+const float FIELD_OF_VIEW = DirectX::XM_PI * 0.4f;
 
 class System;
 
 // Manages graphics state related operations.
 class GraphicsManager
 {
-	friend class System;
-
 public:
 	// Initializes the GraphicsManager and all its sub-components
-	bool Initialize(int screenWidth, int screenHeight, HWND hwnd);
+	bool Initialize(int screenWidth, int screenHeight, HWND hwnd, InputManager* input);
 
 	// Releases all memory associated with this object
 	void Release();
@@ -54,7 +52,7 @@ private:
 	// Renders a frame; does the actual handling and is called within GraphicsManager::Frame()
 	bool Render();
 
-	// The input manager. Written to by System
+	// The input manager.
 	InputManager* input = nullptr;
 
 	// The camera used for screen-space projections
@@ -64,10 +62,10 @@ private:
 	DX3D* dx3d = nullptr;
 
 	// The handle to the rendering window
-	HWND hwnd;
+	HWND hwnd = 0;
 
 	// The pointer to the skybox model
-	Skybox* skybox;
+	Skybox* skybox = nullptr;
 
 	/* Storage vectors */
 

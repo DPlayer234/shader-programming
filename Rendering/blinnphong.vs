@@ -1,3 +1,4 @@
+// The CBuffer with the uniforms
 cbuffer UniformBuffer
 {
 	matrix world;
@@ -10,6 +11,7 @@ cbuffer UniformBuffer
 	float specularPower;
 };
 
+// Per-Vertex data passed to the vertex shader
 struct VertexInputType
 {
 	float4 position : POSITION;
@@ -18,6 +20,7 @@ struct VertexInputType
 	float3 normal : NORMAL;
 };
 
+// Values to pass to the Pixel Shader
 struct PixelInputType
 {
 	float4 position : SV_POSITION;
@@ -28,21 +31,32 @@ struct PixelInputType
 	float3 L : L;
 };
 
+// Vertex shader entry point
 PixelInputType main(VertexInputType input)
 {
 	PixelInputType output;
 	
 	input.position.w = 1.0f;
 
+	// Calculate Model-View Matrix
 	matrix mv = mul(world, view);
+
+	// Calculate the world-position of the vertex
 	float4 p = mul(input.position, mv);
 
-	output.N = mul(input.normal, (float3x3)mv);
-	output.L = mul(lightPos, view) - p.xyz;
-	output.V = -p.xyz;
+	// Calculate transformed normal vector
+	output.N = normalize(mul(input.normal, (float3x3)mv));
 
+	// Get the light direction in relation to the camera
+	output.L = normalize(mul(lightPos, view) - p.xyz);
+
+	// View Position
+	output.V = normalize(-p.xyz);
+
+	// Calculate the screen position of the vertex
 	output.position = mul(p, projection);
 
+	// Pass on these values
 	output.color = input.color;
 	output.tex = input.tex;
 

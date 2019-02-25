@@ -2,10 +2,8 @@
 
 bool InputManager::Initialize()
 {
-	for (int i = 0; i < InputManager::KEY_STATE_COUNT; i++)
-	{
-		keyStates[i] = false;
-	}
+	// Filling the entire keyStates array with false
+	FillMemory(keyStates, sizeof(keyStates), false);
 
 	return true;
 }

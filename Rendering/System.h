@@ -3,8 +3,6 @@
 #include "InputManager.h"
 #include "GraphicsManager.h"
 
-#define WIN32_LEAN_AND_MEAN
-
 class GraphicsManager;
 
 // This class handles creating/removing the window as well as handling other components
@@ -28,7 +26,7 @@ private:
 	bool Frame();
 
 	// Initializes the window and writes its width/height to the parameters
-	void InitializeWindow(int& width, int& height);
+	void InitializeWindow(int* width, int* height);
 
 	// Shuts down/closes the window
 	void ShutdownWindow();

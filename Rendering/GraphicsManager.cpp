@@ -12,11 +12,12 @@
 
 #include "KeyCode.h"
 
-bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd)
+bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd, InputManager* input)
 {
 	bool result;
 
 	this->hwnd = hwnd;
+	this->input = input;
 
 #pragma region DirectX Initialization
 	dx3d = new DX3D;
@@ -91,6 +92,7 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	if (!pyramid || !pyramidShader || !pyramidTexture) return false;
 
 	pyramid->SetPosition(Float3(3.0f, 0.0f, 0.0f));
+	pyramid->SetRotation(Float3(0.0f, -15.0f, 0.0f));
 	pyramidShader->SetTexture(pyramidTexture->GetResourceView());
 	pyramidShader->SpecularPower = 0.5f;
 	pyramidShader->SpecularAlbedo = Float4(0.5f, 0.5f, 0.5f, 1.0f);
@@ -105,6 +107,7 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	if (!glassBox || !glassBoxShader || !glassBoxTexture) return false;
 
 	glassBox->SetPosition(Float3(-3.0f, 0.0f, 0.0f));
+	glassBox->SetRotation(Float3(0.0f, 15.0f, 0.0f));
 	glassBoxShader->SetTexture(glassBoxTexture->GetResourceView());
 	glassBoxShader->SpecularAlbedo = Float4(1.0f, 1.0f, 1.0f, 1.5f);
 	glassBox->SetShader(glassBoxShader);
@@ -139,7 +142,7 @@ bool GraphicsManager::Frame()
 
 void GraphicsManager::Update(float deltaTime)
 {
-	// Allow moving the camera with the keyboard
+#pragma region Camera Movement
 	const static float MOVE_SPEED = 5.0f;
 	const static float ROT_SPEED = 120.0f;
 
@@ -206,6 +209,7 @@ void GraphicsManager::Update(float deltaTime)
 
 	camera->SetPosition(position);
 	camera->SetRotation(rotation);
+#pragma endregion
 }
 
 template<class T>
@@ -280,6 +284,7 @@ bool GraphicsManager::Render()
 
 	bool result;
 
+	// Render every model and OR the result
 	for (Model* const& model : models)
 	{
 		result |= model->Render(context, view, projection, lightPos);

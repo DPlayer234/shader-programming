@@ -7,7 +7,7 @@ bool System::Initialize()
 	int screenWidth = 1;
 	int screenHeight = 1;
 
-	InitializeWindow(screenWidth, screenHeight);
+	InitializeWindow(&screenWidth, &screenHeight);
 
 	input = new InputManager;
 	if (!input) return false;
@@ -18,10 +18,8 @@ bool System::Initialize()
 
 	graphics = new GraphicsManager;
 	if (!graphics) return false;
-	result = graphics->Initialize(screenWidth, screenHeight, windowHandle);
+	result = graphics->Initialize(screenWidth, screenHeight, windowHandle, input);
 	if (!result) return false;
-
-	graphics->input = input;
 
 	return true;
 }
@@ -97,7 +95,7 @@ bool System::Frame()
 	return graphics->Frame();
 }
 
-void System::InitializeWindow(int& width, int& height)
+void System::InitializeWindow(int* width, int* height)
 {
 	WNDCLASSEX window;
 	DEVMODE dmScreenSettings;
@@ -109,6 +107,7 @@ void System::InitializeWindow(int& width, int& height)
 	hInstance = GetModuleHandle(NULL);
 	applicationName = L"Direct3D Rendering Engine?";
 
+	// Define the window style
 	window.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	window.lpfnWndProc = WndProc;
 	window.cbClsExtra = 0;
@@ -122,18 +121,20 @@ void System::InitializeWindow(int& width, int& height)
 	window.lpszClassName = applicationName;
 	window.cbSize = sizeof(window);
 
+	// Register the window class
 	ATOM atom = RegisterClassEx(&window);
 
+	// Define size and centered window position
 	if (FULL_SCREEN)
 	{
 		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
 
-		width = GetSystemMetrics(SM_CXSCREEN);
-		height = GetSystemMetrics(SM_CYSCREEN);
+		*width = GetSystemMetrics(SM_CXSCREEN);
+		*height = GetSystemMetrics(SM_CYSCREEN);
 
 		dmScreenSettings.dmSize = sizeof(dmScreenSettings);
-		dmScreenSettings.dmPelsWidth = width;
-		dmScreenSettings.dmPelsHeight = height;
+		dmScreenSettings.dmPelsWidth = *width;
+		dmScreenSettings.dmPelsHeight = *height;
 		dmScreenSettings.dmBitsPerPel = 24;
 
 		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
@@ -144,20 +145,21 @@ void System::InitializeWindow(int& width, int& height)
 	}
 	else
 	{
-		width = 800;
-		height = 600;
+		*width = 800;
+		*height = 600;
 
-		posX = (GetSystemMetrics(SM_CXSCREEN) - width) / 2;
-		posY = (GetSystemMetrics(SM_CYSCREEN) - height) / 2;
+		posX = (GetSystemMetrics(SM_CXSCREEN) - *width) / 2;
+		posY = (GetSystemMetrics(SM_CYSCREEN) - *height) / 2;
 	}
 
+	// Create and show window
 	windowHandle = CreateWindowEx(
 		WS_EX_APPWINDOW,
 		applicationName,
 		applicationName,
 		WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_POPUP,
 		posX, posY,
-		width, height,
+		*width, *height,
 		NULL, NULL,
 		hInstance,
 		NULL);

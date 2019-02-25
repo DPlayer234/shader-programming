@@ -54,22 +54,6 @@ public:
 	Matrix GetWorldMatrix();
 
 protected:
-	// Initializes the vertex buffer of the model
-	bool InitializeVertexBuffer(ID3D11Device* device);
-
-	// Initializes the index buffer of the model
-	bool InitializeIndexBuffer(ID3D11Device* device);
-
-	// Releases the vertex and index array of the model.
-	// delete[]s both by default.
-	virtual void ReleaseArrays();
-
-	// Creates the vertex array of the model.
-	virtual bool CreateVertexArray() = 0;
-
-	// Creates the index array of the model.
-	virtual bool CreateIndexArray() = 0;
-
 	// Stores the pointer to the shader.
 	Shader* shader = nullptr;
 
@@ -99,4 +83,24 @@ protected:
 
 	// Stores the scale of the model in world space
 	Float3 scale = Float3(1.0f, 1.0f, 1.0f);
+
+	// Initializes the vertex buffer of the model
+	bool InitializeVertexBuffer(ID3D11Device* device);
+
+	// Initializes the index buffer of the model
+	bool InitializeIndexBuffer(ID3D11Device* device);
+
+	// Initializes a buffer. Called within Model::InitializeVertexBuffer() and Model::InitializeIndexBuffer().
+	// The buffer pointer is written to the first parameter.
+	bool InitializeBuffer(ID3D11Buffer** buffer, ID3D11Device* device, void* dataPtr, UINT byteWidth, D3D11_BIND_FLAG bindFlags);
+
+	// Releases the vertex and index array of the model.
+	// delete[]s both by default.
+	virtual void ReleaseArrays();
+
+	// Creates the vertex array of the model.
+	virtual bool CreateVertexArray() = 0;
+
+	// Creates the index array of the model.
+	virtual bool CreateIndexArray() = 0;
 };

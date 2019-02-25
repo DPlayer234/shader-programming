@@ -46,7 +46,7 @@ protected:
 	virtual void SetSubShaderParameters(UniformBufferType*& uniforms);
 
 	// Outputs the shader error message to a file
-	void OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, LPCWSTR path);
+	void OutputShaderErrorMessage(ID3DBlob* errorMessage, HWND hwnd, LPCWSTR path);
 
 private:
 	/* Direct3D shader components */

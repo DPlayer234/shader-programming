@@ -94,8 +94,7 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 	result = device->CreateRenderTargetView(backBuffer, nullptr, &renderTargetView);
 	if (FAILED(result)) return false;
 
-	backBuffer->Release();
-	backBuffer = nullptr;
+	RELEASE_N(backBuffer);
 #pragma endregion
 
 #pragma region Depth Buffer
@@ -120,6 +119,7 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 	if (FAILED(result)) return false;
 #pragma endregion
 
+#pragma region Setting Output Merger
 	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
 
 	okay = GetBlendDesc(&blendDesc);
@@ -129,6 +129,7 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 	if (FAILED(result)) return false;
 
 	deviceContext->OMSetBlendState(blendState, nullptr, 0xffffffff);
+#pragma endregion
 
 #pragma region Rasterizer
 	okay = GetRasterizerDesc(&rasterizerDesc);
@@ -140,7 +141,7 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 	deviceContext->RSSetState(rasterizerState);
 #pragma endregion
 
-#pragma region Viewport and Matrices
+#pragma region Viewport
 	okay = GetViewport(&viewport, screenWidth, screenHeight);
 	if (!okay) return false;
 
@@ -148,7 +149,7 @@ bool DX3D::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, 
 
 	screenAspect = (float)screenWidth / (float)screenHeight;
 
-	projectionMatrix = DirectX::XMMatrixPerspectiveLH(fieldOfView, screenAspect, screenNear, screenDepth);
+	projectionMatrix = DirectX::XMMatrixPerspectiveLH(fieldOfView * screenAspect, screenAspect, screenNear, screenDepth);
 	orthoMatrix = DirectX::XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
 #pragma endregion
 
@@ -159,9 +160,11 @@ void DX3D::Release()
 {
 	if (swapChain)
 	{
+		// Disable fullscreen mode
 		swapChain->SetFullscreenState(false, nullptr);
 	}
 
+	// Order potentially important
 	RELEASE_N(rasterizerState);
 	RELEASE_N(depthStencilState);
 	RELEASE_N(depthStencilBuffer);
@@ -171,7 +174,6 @@ void DX3D::Release()
 	RELEASE_N(device);
 	RELEASE_N(swapChain);
 }
-
 
 void DX3D::BeginScene(float r, float g, float b, float a)
 {
@@ -215,9 +217,6 @@ void DX3D::GetOrthoMatrix(Matrix* outputMatrix)
 
 void DX3D::GetVideoCardInfo(char** cardName, int* memory)
 {
-	// *cardName = new char[128];
-	// strcpy_s(cardName, 128, videoCardDescription);
-
 	*cardName = videoCardDescription;
 	*memory = videoCardMemory;
 }
@@ -243,18 +242,28 @@ bool DX3D::GetDisplayMode(DXGI_MODE_DESC* displayMode, int screenWidth, int scre
 
 	if (FAILED(result)) return false;
 
+	// Find best supported display mode
+	int minAreaDifference = INT_MAX;
+	int targetArea = screenWidth * screenHeight;
+
+	int area, areaDifference;
+	DXGI_MODE_DESC mode;
+
 	for (unsigned int i = 0; i < numModes; i++)
 	{
-		auto mode = displayModeList[i];
+		mode = displayModeList[i];
 
-		if (mode.Width == screenWidth && mode.Height == screenHeight)
+		area = mode.Width * mode.Height;
+		areaDifference = abs(targetArea - area);
+
+		if (mode.Width == screenWidth && mode.Height == screenHeight || areaDifference < minAreaDifference)
 		{
 			// Save selected mode
 			*displayMode = mode;
+			minAreaDifference = areaDifference;
 		}
 	}
 
-	// TODO: Potential memory leaks on error
 	// Display mode list no longer needed
 	delete[] displayModeList;
 	displayModeList = nullptr;
@@ -271,6 +280,7 @@ bool DX3D::LoadVideoCardDesc(IDXGIAdapter* adapter)
 	result = adapter->GetDesc(&adapterDesc);
 	if (FAILED(result)) return false;
 
+	//Copy description from adapter into member variable with correct format
 	size_t converted;
 	errno_t error = wcstombs_s(&converted, videoCardDescription, adapterDesc.Description, sizeof(videoCardDescription));
 	videoCardMemory = (int)adapterDesc.DedicatedVideoMemory / (1024 * 1024);
@@ -412,6 +422,7 @@ bool DX3D::GetBlendDesc(D3D11_BLEND_DESC* _blendDesc)
 {
 	D3D11_BLEND_DESC& blendDesc = *_blendDesc;
 
+	// Allow transparent objects
 	ZeroMemory(&blendDesc, sizeof(blendDesc));
 
 	blendDesc.AlphaToCoverageEnable = false;

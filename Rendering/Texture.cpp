@@ -12,6 +12,7 @@ bool Texture::Initialize(ID3D11Device* device, ID3D11DeviceContext* context, con
 	result = LoadTarga(fileName, &width, &height);
 	if (!result) return false;
 
+#pragma region Create DirectX Texture
 	ZeroMemory(&textureDesc, sizeof(textureDesc));
 
 	textureDesc.Width = width;
@@ -28,10 +29,12 @@ bool Texture::Initialize(ID3D11Device* device, ID3D11DeviceContext* context, con
 
 	hResult = device->CreateTexture2D(&textureDesc, nullptr, &texture);
 	if (FAILED(hResult)) return false;
+#pragma endregion
 
 	rowPitch = (width * 4) * sizeof(unsigned char);
 	context->UpdateSubresource(texture, 0, nullptr, targaData, rowPitch, 0);
 
+#pragma region Create DirectX Subresource
 	ZeroMemory(&srvDesc, sizeof(srvDesc));
 
 	srvDesc.Format = textureDesc.Format;
@@ -41,6 +44,7 @@ bool Texture::Initialize(ID3D11Device* device, ID3D11DeviceContext* context, con
 
 	hResult = device->CreateShaderResourceView(texture, &srvDesc, &textureView);
 	if (FAILED(hResult)) return false;
+#pragma endregion
 
 	context->GenerateMips(textureView);
 
@@ -66,14 +70,14 @@ bool Texture::LoadTarga(const char* fileName, int* width, int* height)
 	errno_t error;
 	int bpp, imageSize;
 	FILE* filePtr;
-	unsigned int count;
+	size_t count;
 	TargaHeader targaFileHeader;
 	unsigned char* targaImage;
-
+	
 	error = fopen_s(&filePtr, fileName, "rb");
 	if (error) return false;
 
-	count = (unsigned int)fread(&targaFileHeader, sizeof(TargaHeader), 1, filePtr);
+	count = fread(&targaFileHeader, sizeof(TargaHeader), 1, filePtr);
 	if (count != 1) return false;
 
 	*width = targaFileHeader.width;
@@ -87,7 +91,7 @@ bool Texture::LoadTarga(const char* fileName, int* width, int* height)
 	targaImage = new unsigned char[imageSize];
 	if (!targaImage) return false;
 
-	count = (unsigned int)fread(targaImage, 1, imageSize, filePtr);
+	count = fread(targaImage, 1, imageSize, filePtr);
 	if (count != imageSize) return false;
 
 	error = fclose(filePtr);

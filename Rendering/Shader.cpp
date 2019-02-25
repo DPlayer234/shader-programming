@@ -33,12 +33,11 @@ bool Shader::InitializeShader(ID3D11Device* device, HWND hwnd, LPCWSTR vertexSha
 
 	HRESULT result;
 
-	ID3D10Blob* errorMessage = nullptr;
-	ID3D10Blob* vertexShaderBuffer = nullptr;
-	ID3D10Blob* pixelShaderBuffer = nullptr;
+	ID3DBlob* errorMessage = nullptr;
+	ID3DBlob* vertexShaderBuffer = nullptr;
+	ID3DBlob* pixelShaderBuffer = nullptr;
 
 #pragma region Load and Compile Shaders
-
 	result = D3DCompileFromFile(
 		vertexShaderPath, nullptr, nullptr,
 		"main", "vs_5_0",
@@ -78,7 +77,6 @@ bool Shader::InitializeShader(ID3D11Device* device, HWND hwnd, LPCWSTR vertexSha
 		&pixelShader);
 
 	if (FAILED(result)) return false;
-
 #pragma endregion
 
 	result = device->CreateInputLayout(
@@ -113,11 +111,14 @@ void Shader::ReleaseShader()
 
 void Shader::RenderShader(ID3D11DeviceContext* context, int indexCount)
 {
+	// Set Input Assembler input layout
 	context->IASetInputLayout(layout);
 
+	// Set the shaders
 	context->VSSetShader(vertexShader, nullptr, 0);
 	context->PSSetShader(pixelShader, nullptr, 0);
 
+	// Draw the vertices/indices
 	context->DrawIndexed(indexCount, 0, 0);
 }
 
@@ -132,6 +133,7 @@ bool Shader::SetShaderParamaters(ID3D11DeviceContext* context, const UniformBuff
 	result = context->Map(uniformBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if (FAILED(result)) return false;
 
+	// Load uniforms into shader buffer
 	dataPtr = (UniformBufferType*)mappedResource.pData;
 
 	dataPtr->World = DirectX::XMMatrixTranspose(uniforms.World);
@@ -142,11 +144,14 @@ bool Shader::SetShaderParamaters(ID3D11DeviceContext* context, const UniformBuff
 	SetSubShaderParameters(dataPtr);
 
 	context->Unmap(uniformBuffer, 0);
+
+	// Send buffer to shaders
 	context->VSSetConstantBuffers(0, 1, &uniformBuffer);
 	context->PSSetConstantBuffers(0, 1, &uniformBuffer);
 
 	if (textureView)
 	{
+		// Set texture
 		context->PSSetShaderResources(0, 1, &textureView);
 	}
 
@@ -158,7 +163,7 @@ void Shader::SetSubShaderParameters(UniformBufferType*& uniforms)
 	// Nothing by default
 }
 
-void Shader::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, LPCWSTR shaderPath)
+void Shader::OutputShaderErrorMessage(ID3DBlob* errorMessage, HWND hwnd, LPCWSTR shaderPath)
 {
 	if (!errorMessage)
 	{

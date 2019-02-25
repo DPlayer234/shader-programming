@@ -16,17 +16,20 @@ void Model::Release()
 
 bool Model::Render(ID3D11DeviceContext* context, const Matrix& view, const Matrix& projection, const Float3& lightPos)
 {
+	// No shader = Failure
 	if (!shader) return false;
 
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
+	const static UINT stride = sizeof(Vertex);
+	const static UINT offset = 0;
 
+	// Load the variables into the input buffer
 	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	UniformBufferType uniforms;
 
+	// Load uniforms into the buffer
 	uniforms.World = GetWorldMatrix();
 	uniforms.View = view;
 	uniforms.Projection = projection;
@@ -85,9 +88,9 @@ Matrix Model::GetWorldMatrix()
 	Matrix translationM = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
 
 	Matrix rotationM = DirectX::XMMatrixRotationRollPitchYaw(
-		DirectX::XMConvertToRadians(rotation.x),
-		DirectX::XMConvertToRadians(rotation.y),
-		DirectX::XMConvertToRadians(rotation.z));
+		rotation.x * DEG_TO_RAD,
+		rotation.y * DEG_TO_RAD,
+		rotation.z * DEG_TO_RAD);
 
 	Matrix scaleM = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
 
@@ -98,41 +101,31 @@ bool Model::InitializeVertexBuffer(ID3D11Device* device)
 {
 	if (!CreateVertexArray()) return false;
 
-	D3D11_BUFFER_DESC bufferDesc;
-	ZeroMemory(&bufferDesc, sizeof(bufferDesc));
-
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.CPUAccessFlags = 0;
-	bufferDesc.ByteWidth = sizeof(Vertex) * vertexCount;
-	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-	D3D11_SUBRESOURCE_DATA data;
-	ZeroMemory(&data, sizeof(data));
-	data.pSysMem = vertexArray;
-
-	HRESULT result = device->CreateBuffer(&bufferDesc, &data, &vertexBuffer);
-	if (FAILED(result)) return false;
-
-	return true;
+	return InitializeBuffer(&vertexBuffer, device, vertexArray, sizeof(Vertex) * vertexCount, D3D11_BIND_VERTEX_BUFFER);
 }
 
 bool Model::InitializeIndexBuffer(ID3D11Device* device)
 {
 	if (!CreateIndexArray()) return false;
 
+	return InitializeBuffer(&indexBuffer, device, indexArray, sizeof(UINT) * indexCount, D3D11_BIND_INDEX_BUFFER);
+}
+
+bool Model::InitializeBuffer(ID3D11Buffer** buffer, ID3D11Device* device, void* dataPtr, UINT byteWidth, D3D11_BIND_FLAG bindFlags)
+{
 	D3D11_BUFFER_DESC bufferDesc;
 	ZeroMemory(&bufferDesc, sizeof(bufferDesc));
 
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.CPUAccessFlags = 0;
-	bufferDesc.ByteWidth = sizeof(UINT) * indexCount;
-	bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	bufferDesc.ByteWidth = byteWidth;
+	bufferDesc.BindFlags = bindFlags;
 
 	D3D11_SUBRESOURCE_DATA data;
 	ZeroMemory(&data, sizeof(data));
-	data.pSysMem = indexArray;
+	data.pSysMem = dataPtr;
 
-	HRESULT result = device->CreateBuffer(&bufferDesc, &data, &indexBuffer);
+	HRESULT result = device->CreateBuffer(&bufferDesc, &data, &*buffer);
 	if (FAILED(result)) return false;
 
 	return true;
