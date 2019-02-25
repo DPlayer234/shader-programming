@@ -143,9 +143,11 @@
     <ClCompile Include="GraphicsManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MateShader.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="PlaneModel.cpp" />
     <ClCompile Include="PyramidModel.cpp" />
+    <ClCompile Include="RoughShader.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="System.cpp" />
@@ -162,9 +164,11 @@
     <ClInclude Include="GraphicsManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="KeyCode.h" />
+    <ClInclude Include="MateShader.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="PlaneModel.h" />
     <ClInclude Include="PyramidModel.h" />
+    <ClInclude Include="RoughShader.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="System.h" />
@@ -178,10 +182,14 @@
     <Text Include="shader-error-log.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="blinnphong.ps" />
-    <None Include="blinnphong.vs" />
-    <None Include="unlit.ps" />
-    <None Include="unlit.vs" />
+    <None Include="BlinnPhong.ps" />
+    <None Include="BlinnPhong.vs" />
+    <None Include="Mate.ps" />
+    <None Include="Mate.vs" />
+    <None Include="Rough.ps" />
+    <None Include="Rough.vs" />
+    <None Include="Unlit.ps" />
+    <None Include="Unlit.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="data\Circle.tga" />

@@ -15,6 +15,9 @@ cbuffer UniformBuffer
 Texture2D stexture;
 SamplerState sampleType;
 
+// Minimum Albedo lighting
+#define MIN_DIFFUSE_ALBEDO 0.15f
+
 // Interpolated values passed by the vertex shader
 struct PixelInputType
 {
@@ -29,11 +32,16 @@ struct PixelInputType
 // Pixel shader entry point
 float4 main(PixelInputType input) : SV_TARGET
 {
+	// Normalize inputs
+	float3 V = normalize(input.V);
+	float3 N = normalize(input.N);
+	float3 L = normalize(input.L);
+
 	// Compute the half-way vector for better performance than reflect()
-	float3 H = normalize(input.L + input.V);
+	float3 H = normalize(L + V);
 	
-	float4 diffuse = max(dot(input.N, input.L), 0.0f) * diffuseAlbedo;
-	float4 specular = pow(max(dot(input.N, H), 0.0f), specularPower) * specularAlbedo;
+	float4 diffuse = max(dot(N, L), MIN_DIFFUSE_ALBEDO) * diffuseAlbedo;
+	float4 specular = pow(max(dot(N, H), 0.0f), specularPower) * specularAlbedo;
 
 	return stexture.Sample(sampleType, input.tex) * input.color * float4((diffuse + specular).xyz, max(1.0f, diffuse.a + specular.a));
 }

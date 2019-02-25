@@ -9,6 +9,8 @@
 
 #include "UnlitShader.h"
 #include "BlinnPhongShader.h"
+#include "MateShader.h"
+#include "GlitterShader.h"
 
 #include "KeyCode.h"
 
@@ -86,7 +88,7 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd, I
 
 #pragma region Pyramid
 	auto pyramid = AddModel<PyramidModel>();
-	auto pyramidShader = LoadShader<BlinnPhongShader>();
+	auto pyramidShader = LoadShader<MateShader>();
 	auto pyramidTexture = LoadTexture("data/stone01.tga");
 
 	if (!pyramid || !pyramidShader || !pyramidTexture) return false;
@@ -94,8 +96,6 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd, I
 	pyramid->SetPosition(Float3(3.0f, 0.0f, 0.0f));
 	pyramid->SetRotation(Float3(0.0f, -15.0f, 0.0f));
 	pyramidShader->SetTexture(pyramidTexture->GetResourceView());
-	pyramidShader->SpecularPower = 0.5f;
-	pyramidShader->SpecularAlbedo = Float4(0.5f, 0.5f, 0.5f, 1.0f);
 	pyramid->SetShader(pyramidShader);
 #pragma endregion
 
@@ -111,6 +111,21 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd, I
 	glassBoxShader->SetTexture(glassBoxTexture->GetResourceView());
 	glassBoxShader->SpecularAlbedo = Float4(1.0f, 1.0f, 1.0f, 1.5f);
 	glassBox->SetShader(glassBoxShader);
+#pragma endregion
+
+#pragma region Rough Box
+	auto glitterBox = AddModel<CubeModel>();
+	auto glitterBoxShader = LoadShader<GlitterShader>();
+	auto glitterBoxTexture = LoadTexture("data/glitter.tga");
+
+	if (!glitterBox || !glitterBoxShader || !glitterBoxTexture) return false;
+
+	glitterBox->SetPosition(Float3(0.0f, 0.0f, 3.0f));
+	glitterBox->SetRotation(Float3(45.0f, 0.0f, 45.0f));
+	glitterBoxShader->SetTexture(glitterBoxTexture->GetResourceView());
+	glitterBoxShader->SpecularPower = 2.5f;
+	glitterBoxShader->SpecularAlbedo = Float4(1.0f, 1.0f, 1.0f, 1.0f);
+	glitterBox->SetShader(glitterBoxShader);
 #pragma endregion
 
 	return true;

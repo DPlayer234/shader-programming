@@ -4,7 +4,7 @@ bool BlinnPhongShader::Initialize(ID3D11Device* device, HWND hwnd)
 {
 	bool result;
 
-	result = InitializeShader(device, hwnd, L"blinnphong.vs", L"blinnphong.ps");
+	result = InitializeShader(device, hwnd, L"BlinnPhong.vs", L"BlinnPhong.ps");
 	if (!result) return false;
 
 	return true;

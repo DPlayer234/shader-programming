@@ -69,6 +69,12 @@
     <ClCompile Include="PlaneModel.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="MateShader.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="RoughShader.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="System.h">
@@ -131,21 +137,39 @@
     <ClInclude Include="PlaneModel.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="MateShader.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="RoughShader.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="shader-error-log.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="unlit.ps">
+    <None Include="BlinnPhong.ps">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="unlit.vs">
+    <None Include="BlinnPhong.vs">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="blinnphong.vs">
+    <None Include="Unlit.ps">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="blinnphong.ps">
+    <None Include="Unlit.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Mate.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Mate.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Rough.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Rough.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

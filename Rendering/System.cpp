@@ -188,7 +188,7 @@ void System::ShutdownWindow()
 
 bool System::InitializeHighFrequencyTimer()
 {
-	LARGE_INTEGER freq = {};
+	LARGE_INTEGER freq;
 	if (!QueryPerformanceFrequency(&freq)) return false;
 	
 	secsPerTick = 1.0f / freq.QuadPart;
@@ -199,7 +199,7 @@ bool System::InitializeHighFrequencyTimer()
 
 bool System::UpdateHighFrequencyTimer()
 {
-	LARGE_INTEGER currentTicks = {};
+	LARGE_INTEGER currentTicks;
 	QueryPerformanceCounter(&currentTicks);
 
 	deltaTime = (currentTicks.QuadPart - oldTicks.QuadPart) * secsPerTick;

@@ -26,7 +26,6 @@ struct PixelInputType
 	float4 position : SV_POSITION;
 	float4 color : COLOR;
 	float2 tex : TEXCOORD0;
-	float3 V : V;
 	float3 N : N;
 	float3 L : L;
 };
@@ -45,13 +44,10 @@ PixelInputType main(VertexInputType input)
 	float4 p = mul(input.position, mv);
 
 	// Calculate transformed normal vector
-	output.N = normalize(mul(input.normal, (float3x3)mv));
+	output.N = mul(input.normal, (float3x3)mv);
 
 	// Get the light direction in relation to the camera
-	output.L = normalize(mul(lightPos, view) - p.xyz);
-
-	// View Position
-	output.V = normalize(-p.xyz);
+	output.L = mul(lightPos, view) - p.xyz;
 
 	// Calculate the screen position of the vertex
 	output.position = mul(p, projection);
