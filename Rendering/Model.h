@@ -64,10 +64,10 @@ protected:
 	ID3D11Buffer* indexBuffer = nullptr;
 
 	// The amount of vertices this model has
-	int vertexCount = 0;
+	UINT vertexCount = 0;
 
 	// The amount of indices this model has
-	int indexCount = 0;
+	UINT indexCount = 0;
 
 	// The pointer to the vertex array
 	Vertex* vertexArray = nullptr;

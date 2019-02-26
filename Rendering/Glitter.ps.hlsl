@@ -19,6 +19,7 @@ SamplerState sampleType;
 #define MIN_DIFFUSE_ALBEDO 0.15f
 
 // Source: https://gamedev.stackexchange.com/questions/32681/random-number-hlsl
+// Generates a number that's random enough.
 float2 rand_2_10(in float2 uv)
 {
     float noiseX = (frac(sin(dot(uv, float2(12.9898,78.233) * 2.0)) * 4375.85453));
@@ -43,15 +44,15 @@ float4 main(PixelInputType input) : SV_TARGET
 	// Calculate Model-View Matrix
 	matrix mv = mul(world, view);
 
-	// Random
-	float2 r = rand_2_10(input.tex) * 0.8;
-
 	// Normalize inputs
 	float3 V = normalize(input.V);
 	float3 N = normalize(input.N);
 	float3 L = normalize(input.L);
 
-	N += normalize(mul(float3(r.x, 1.0f, r.y), (float3x3)mv)) * 0.8;
+	// Randomize the normal a bit to achieve pseudo-reflecting particles
+	float2 r1 = rand_2_10(input.tex);
+	float2 r2 = rand_2_10(input.tex + float2(1.0f, 1.0f));
+	N += normalize(mul(r1.xyx + r2.yyx, (float3x3)mv));
 
 	// Compute the half-way vector for better performance than reflect()
 	float3 H = normalize(L + V);

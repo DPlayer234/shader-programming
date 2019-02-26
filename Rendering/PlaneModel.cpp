@@ -12,7 +12,7 @@ bool PlaneModel::CreateVertexArray()
 	{
 		for (z = MIN_VERTEX; z < MAX_VERTEX; z++)
 		{
-			SetVertices(vertexArray + index, Float3(x, 0.0f, z));
+			SetVertices(vertexArray + index, Float3((float)x, 0.0f, (float)z));
 			index += 4;
 		}
 	}

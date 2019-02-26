@@ -49,10 +49,10 @@ void CubeModel::SetVertices(Vertex vertices[4], Float3 direction, Float3 offset1
 	vertices[2].Position = add(direction, offset1, unm(offset2));
 	vertices[3].Position = add(direction, unm(offset1), unm(offset2));
 
-	vertices[0].Normal = add(direction, mul(vertices[0].Position, 0.1));
-	vertices[1].Normal = add(direction, mul(vertices[1].Position, 0.1));
-	vertices[2].Normal = add(direction, mul(vertices[2].Position, 0.1));
-	vertices[3].Normal = add(direction, mul(vertices[3].Position, 0.1));
+	vertices[0].Normal = add(direction, mul(vertices[0].Position, 0.1f));
+	vertices[1].Normal = add(direction, mul(vertices[1].Position, 0.1f));
+	vertices[2].Normal = add(direction, mul(vertices[2].Position, 0.1f));
+	vertices[3].Normal = add(direction, mul(vertices[3].Position, 0.1f));
 
 	vertices[0].Tex = Float2(uvBottomRight.x, uvTopLeft.y);
 	vertices[1].Tex = uvTopLeft;
