@@ -166,6 +166,7 @@ void DX3D::Release()
 
 	// Order potentially important
 	RELEASE_N(rasterizerState);
+	RELEASE_N(blendState);
 	RELEASE_N(depthStencilState);
 	RELEASE_N(depthStencilBuffer);
 	RELEASE_N(depthStencilView);
