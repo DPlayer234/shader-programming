@@ -111,20 +111,6 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd, I
 	pyramid->SetShader(pyramidShader);
 #pragma endregion
 
-#pragma region Glass Box
-	auto glassBox = AddModel<CubeModel>();
-	auto glassBoxShader = LoadShader<BlinnPhongShader>();
-	auto glassBoxTexture = LoadTexture("data/glass.tga");
-
-	if (!glassBox || !glassBoxShader || !glassBoxTexture) return false;
-
-	glassBox->SetPosition(Float3(-3.0f, 0.0f, 0.0f));
-	glassBox->SetRotation(Float3(0.0f, 15.0f, 0.0f));
-	glassBoxShader->SetTexture(glassBoxTexture->GetResourceView());
-	glassBoxShader->SpecularAlbedo = Float4(1.0f, 1.0f, 1.0f, 1.5f);
-	glassBox->SetShader(glassBoxShader);
-#pragma endregion
-
 #pragma region Rough Box
 	auto glitterBox = AddModel<CubeModel>();
 	auto glitterBoxShader = LoadShader<GlitterShader>();
@@ -138,6 +124,20 @@ bool GraphicsManager::Initialize(int screenWidth, int screenHeight, HWND hwnd, I
 	glitterBoxShader->SpecularPower = 2.5f;
 	glitterBoxShader->SpecularAlbedo = Float4(1.0f, 1.0f, 1.0f, 1.0f);
 	glitterBox->SetShader(glitterBoxShader);
+#pragma endregion
+
+#pragma region Glass Box
+	auto glassBox = AddModel<CubeModel>();
+	auto glassBoxShader = LoadShader<BlinnPhongShader>();
+	auto glassBoxTexture = LoadTexture("data/glass.tga");
+
+	if (!glassBox || !glassBoxShader || !glassBoxTexture) return false;
+
+	glassBox->SetPosition(Float3(-3.0f, 0.0f, 0.0f));
+	glassBox->SetRotation(Float3(0.0f, 15.0f, 0.0f));
+	glassBoxShader->SetTexture(glassBoxTexture->GetResourceView());
+	glassBoxShader->SpecularAlbedo = Float4(1.0f, 1.0f, 1.0f, 1.5f);
+	glassBox->SetShader(glassBoxShader);
 #pragma endregion
 
 	return true;

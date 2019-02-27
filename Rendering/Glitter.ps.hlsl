@@ -52,7 +52,7 @@ float4 main(PixelInputType input) : SV_TARGET
 	// Randomize the normal a bit to achieve pseudo-reflecting particles
 	float2 r1 = rand_2_10(input.tex);
 	float2 r2 = rand_2_10(input.tex + float2(1.0f, 1.0f));
-	N += normalize(mul(r1.xyx + r2.yyx, (float3x3)mv));
+	N += normalize(r1.xyx + r2.yyx);
 
 	// Compute the half-way vector for better performance than reflect()
 	float3 H = normalize(L + V);
