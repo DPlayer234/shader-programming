@@ -192,7 +192,11 @@
     <None Include="Unlit.vs.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="data\Circle.tga" />
+    <Image Include="data\circle.tga" />
+    <Image Include="data\floor.tga" />
+    <Image Include="data\glass.tga" />
+    <Image Include="data\glitter.tga" />
+    <Image Include="data\metal.tga" />
     <Image Include="data\skybox.tga" />
     <Image Include="data\stone01.tga" />
   </ItemGroup>

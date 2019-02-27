@@ -16,9 +16,6 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{4a218e46-ea7f-402a-925f-a18ad72117d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Data">
-      <UniqueIdentifier>{bd2e2a56-f6a9-425c-8dac-66c228c5117b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -174,14 +171,26 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="data\stone01.tga">
-      <Filter>Data</Filter>
+    <Image Include="data\circle.tga">
+      <Filter>Ressourcendateien</Filter>
     </Image>
-    <Image Include="data\Circle.tga">
-      <Filter>Data</Filter>
+    <Image Include="data\floor.tga">
+      <Filter>Ressourcendateien</Filter>
+    </Image>
+    <Image Include="data\glass.tga">
+      <Filter>Ressourcendateien</Filter>
+    </Image>
+    <Image Include="data\glitter.tga">
+      <Filter>Ressourcendateien</Filter>
+    </Image>
+    <Image Include="data\metal.tga">
+      <Filter>Ressourcendateien</Filter>
     </Image>
     <Image Include="data\skybox.tga">
-      <Filter>Data</Filter>
+      <Filter>Ressourcendateien</Filter>
+    </Image>
+    <Image Include="data\stone01.tga">
+      <Filter>Ressourcendateien</Filter>
     </Image>
   </ItemGroup>
 </Project>
