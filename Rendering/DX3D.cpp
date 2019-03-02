@@ -216,7 +216,7 @@ void DX3D::GetOrthoMatrix(Matrix* outputMatrix)
 	*outputMatrix = orthoMatrix;
 }
 
-void DX3D::GetVideoCardInfo(char** cardName, int* memory)
+void DX3D::GetVideoCardInfo(const char** cardName, int* memory)
 {
 	*cardName = videoCardDescription;
 	*memory = videoCardMemory;

@@ -6,7 +6,9 @@
 *.enc
 
 Debug
+Release
 Rendering/Debug
+Rendering/Release
 
 # Prerequisites
 *.d

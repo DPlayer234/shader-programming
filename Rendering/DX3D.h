@@ -39,7 +39,7 @@ public:
 	void GetOrthoMatrix(Matrix* outputMatrix);
 
 	// Writes the char* with the video card name and the available video card memory to the specified variables
-	void GetVideoCardInfo(char** cardName, int* memory);
+	void GetVideoCardInfo(const char** cardName, int* memory);
 
 private:
 	// Whether or not VSync was enabled
